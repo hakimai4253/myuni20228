@@ -8,16 +8,21 @@
     <style>
         :root {
             --bg-color: #ffeaa7;
-            --main-pink: #fab1a0;
             --deep-pink: #e84393;
+            --light-pink: #fab1a0;
             --purple: #6c5ce7;
             --pixel-font: 'VT323', monospace;
+        }
+
+        /* 讓像素圖保持清晰，不會模糊 */
+        img {
+            image-rendering: pixelated; 
         }
 
         body {
             font-family: var(--pixel-font);
             background-color: var(--bg-color);
-            background-image: radial-gradient(#fab1a0 15%, transparent 16%), radial-gradient(#fab1a0 15%, transparent 16%);
+            background-image: radial-gradient(var(--light-pink) 15%, transparent 16%), radial-gradient(var(--light-pink) 15%, transparent 16%);
             background-size: 20px 20px;
             margin: 0;
             padding: 0;
@@ -75,88 +80,119 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* 公主顯示區 */
+        /* --- 公主舞台 --- */
         .princess-stage {
-            width: 250px;
-            height: 300px;
+            width: 260px;
+            height: 360px;
             background: #fff;
             border: 4px solid gold;
-            border-radius: 50% 50% 10px 10px;
+            border-radius: 20px; 
             position: relative;
             margin: 10px auto;
             overflow: hidden;
             box-shadow: inset 0 0 20px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
+        /* 圖片圖層 */
+        .layer-base-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* 確保整張圖片都看得到 */
+            z-index: 1;
+        }
+
+        /* 裝備漂浮層 (因為底圖已經穿衣服了，裝備改為漂浮在周圍的魔法特效) */
         .layer {
             position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
             transition: all 0.5s;
-            opacity: 0.3;
-            filter: grayscale(100%);
+            opacity: 0; 
+            filter: grayscale(0%);
+            pointer-events: none;
+            filter: drop-shadow(0px 0px 5px gold); /* 讓裝備發光 */
         }
         
         .layer.unlocked {
             opacity: 1;
-            filter: grayscale(0%);
             animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .layer-base { top: 60px; font-size: 80px; z-index: 1; opacity: 1; filter: none; }
-        .layer-dress { top: 130px; font-size: 120px; z-index: 2; }
-        .layer-shoes { top: 230px; font-size: 40px; z-index: 3; }
-        .layer-hair { top: 40px; font-size: 90px; z-index: 4; }
-        .layer-wand { top: 140px; left: 75%; font-size: 60px; z-index: 5; transform: translateX(-50%) rotate(15deg); }
-        .layer-pet { top: 180px; left: 20%; font-size: 50px; z-index: 6; }
-        .layer-crown { top: 10px; font-size: 60px; z-index: 7; }
+        /* 調整裝備位置，讓它們變成「浮在身邊的魔法道具」 */
+        .layer-dress { top: 20px; right: 10px; font-size: 50px; z-index: 5; } /* 縮小一點放在旁邊 */
+        .layer-shoes { bottom: 10px; right: 10px; font-size: 40px; z-index: 5; }
+        .layer-hair { top: 10px; left: 10px; font-size: 50px; z-index: 5; }
+        .layer-wand { top: 50%; right: 5px; font-size: 50px; z-index: 6; }
+        .layer-pet { bottom: 10px; left: 10px; font-size: 60px; z-index: 6; }
+        .layer-crown { top: -10px; left: 50%; transform: translateX(-50%); font-size: 60px; z-index: 7; }
+
+        @keyframes popIn {
+            0% { transform: scale(0); }
+            80% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
 
         /* UI 元件 */
         h1, h2 { color: var(--deep-pink); margin: 5px 0; text-shadow: 2px 2px 0 #fff; }
         
         .pixel-btn {
             background-color: var(--deep-pink);
-            border: 2px solid #000;
+            border: 3px solid #000;
             color: #fff;
-            padding: 10px 20px;
+            padding: 10px 25px;
             font-family: var(--pixel-font);
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             cursor: pointer;
-            box-shadow: 4px 4px 0px rgba(0,0,0,0.2);
-            margin: 10px;
-            border-radius: 8px;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.3);
+            margin: 15px;
+            border-radius: 12px;
             touch-action: manipulation;
+            transition: all 0.1s;
         }
-        .pixel-btn:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px rgba(0,0,0,0.2); }
+        .pixel-btn:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px rgba(0,0,0,0.3); }
         
         .input-box {
             font-family: var(--pixel-font);
             font-size: 1.5rem;
             padding: 8px;
             border: 3px solid var(--purple);
-            border-radius: 5px;
+            border-radius: 10px;
             text-align: center;
             width: 80%;
             margin: 10px 0;
+            background: #fff;
         }
 
-        .avatar-select { display: flex; gap: 10px; justify-content: center; margin: 10px; }
+        /* 頭像選擇區 */
+        .avatar-select { 
+            display: flex; 
+            gap: 15px; 
+            justify-content: center; 
+            margin: 20px 0; 
+            flex-wrap: wrap;
+        }
         .avatar-opt { 
-            font-size: 2.5rem; 
+            width: 80px; 
+            height: 80px; 
             cursor: pointer; 
-            border: 3px solid transparent; 
-            border-radius: 50%; 
+            border: 4px solid #fff;
+            border-radius: 15px; 
             padding: 5px; 
-            background: #fff; 
-            transition: transform 0.2s;
+            background: var(--light-pink);
+            transition: all 0.2s;
+            box-shadow: 3px 3px 0px rgba(0,0,0,0.1);
+            object-fit: contain; /* 保持圖片比例 */
+            background-color: #fff;
         }
         .avatar-opt.selected { 
-            border-color: var(--deep-pink); 
-            background: #ffeaa7; 
-            transform: scale(1.1);
+            border-color: var(--deep-pink);
+            transform: scale(1.1) translateY(-3px);
+            box-shadow: 5px 5px 0px rgba(232, 67, 147, 0.4);
+            background-color: #ffeaa7;
         }
 
-        /* 題目區修正 */
+        /* 題目區 */
         .quiz-panel { width: 100%; text-align: left; padding-bottom: 20px; }
         .question-row { 
             background: #fff; border: 2px solid var(--purple); margin-bottom: 8px; padding: 10px; 
@@ -188,26 +224,29 @@
     <div class="screen-container">
         
         <div id="screen-setup" class="screen-section active">
-            <h1>👑 公主檔案建立 👑</h1>
-            <p>請輸入公主的名字：</p>
+            <h1 style="font-size: 2.5rem;">🎀 建立公主檔案 🎀</h1>
+            <p style="font-size: 1.5rem;">請輸入公主的名字：</p>
             <input type="text" id="player-name" class="input-box" placeholder="例如: 艾莎" maxlength="8">
-            <p>選擇你的樣子：</p>
+            <p style="font-size: 1.5rem; margin-top: 20px;">選擇你的樣子：</p>
+            
             <div class="avatar-select">
-                <div class="avatar-opt selected" onclick="selectAvatar('👧', this)">👧</div>
-                <div class="avatar-opt" onclick="selectAvatar('👩‍🦰', this)">👩‍🦰</div>
-                <div class="avatar-opt" onclick="selectAvatar('👱‍♀️', this)">👱‍♀️</div>
-                <div class="avatar-opt" onclick="selectAvatar('👩‍🦱', this)">👩‍🦱</div>
+                <img src="1.jpg" class="avatar-opt" data-id="1.jpg" onclick="selectAvatar(this)" onerror="this.src='https://via.placeholder.com/80?text=P1'">
+                <img src="2.jpg" class="avatar-opt" data-id="2.jpg" onclick="selectAvatar(this)" onerror="this.src='https://via.placeholder.com/80?text=P2'">
+                <img src="3.jpg" class="avatar-opt" data-id="3.jpg" onclick="selectAvatar(this)" onerror="this.src='https://via.placeholder.com/80?text=P3'">
+                <img src="4.jpg" class="avatar-opt" data-id="4.jpg" onclick="selectAvatar(this)" onerror="this.src='https://via.placeholder.com/80?text=P4'">
             </div>
-            <button class="pixel-btn" onclick="startGame()">建立檔案 & 開始</button>
+            
+            <button class="pixel-btn" style="font-size: 1.8rem; background-color: #00b894;" onclick="startGame()">✨ 建立檔案 & 開始 ✨</button>
         </div>
 
         <div id="screen-home" class="screen-section">
             <div style="display:flex; justify-content:space-between; width:100%; align-items:center;">
                 <div style="font-size:1.2rem;">公主: <span id="display-name" style="color:var(--deep-pink); font-weight:bold;"></span></div>
-                <button style="font-size:0.8rem; background:#b2bec3; border:1px solid #000; cursor:pointer;" onclick="resetGame()">重置</button>
+                <button style="font-size:0.8rem; background:#b2bec3; border:2px solid #000; cursor:pointer; border-radius: 5px;" onclick="resetGame()">重置</button>
             </div>
             <div class="princess-stage">
-                <div id="l-base" class="layer layer-base">👧</div>
+                <img id="l-base-img" src="" class="layer-base-img">
+                
                 <div id="l-dress" class="layer layer-dress">👗</div>
                 <div id="l-shoes" class="layer layer-shoes">👠</div>
                 <div id="l-hair" class="layer layer-hair">🎀</div>
@@ -245,8 +284,8 @@
         
         <div id="screen-final" class="screen-section">
             <h1 style="color:#d63031;">🎉 完美公主誕生 🎉</h1>
-            <div class="princess-stage" style="transform: scale(1.2); margin: 30px auto; background: linear-gradient(to top, #fff 0%, #fff0f5 100%);">
-                 <div id="f-base" class="layer layer-base" style="opacity:1; filter:none;"></div>
+            <div class="princess-stage" style="transform: scale(1.2); margin: 30px auto; background: linear-gradient(to top, #fff 0%, #fff0f5 100%); border-radius: 20px;">
+                 <img id="f-base-img" src="" class="layer-base-img">
                  <div class="layer layer-dress unlocked">👗</div>
                  <div class="layer layer-shoes unlocked">👠</div>
                  <div class="layer layer-hair unlocked">🎀</div>
@@ -262,9 +301,8 @@
 </div>
 
 <script>
-    let player = { name: "", avatar: "👧", level: 0, unlocked: [false, false, false, false, false, false] };
+    let player = { name: "", avatarId: "1.jpg", level: 0, unlocked: [false, false, false, false, false, false] };
 
-    // 每一關固定的題型設定 (故事模式不讓使用者選，因為要配合劇情)
     const stages = [
         { title: "第一章：衣櫥魔法", text: "衣櫥空空的！請用「加法魔法」變出禮服！", itemIcon: "👗", itemName: "星空禮服", layerId: "l-dress", quizType: ["add"], diff: {min:10, max:50} },
         { title: "第二章：尋找鞋子", text: "光著腳丫怎麼跳舞？用「減法魔法」找回玻璃鞋！", itemIcon: "👠", itemName: "玻璃鞋", layerId: "l-shoes", quizType: ["sub"], diff: {min:20, max:60} },
@@ -275,9 +313,13 @@
     ];
 
     let currentQuestions = [];
-    let selectedAvatar = "👧";
+    let selectedAvatarId = "1.jpg"; 
 
     window.onload = function() {
+        // 預設選中第一個
+        const firstOpt = document.querySelector('.avatar-opt[data-id="1.jpg"]');
+        if(firstOpt) selectAvatar(firstOpt);
+
         try {
             if(localStorage.getItem('princessStorySave')) {
                 const saved = JSON.parse(localStorage.getItem('princessStorySave'));
@@ -301,17 +343,17 @@
         }
     }
 
-    function selectAvatar(char, element) {
-        selectedAvatar = char;
+    function selectAvatar(element) {
+        selectedAvatarId = element.dataset.id;
         document.querySelectorAll('.avatar-opt').forEach(el => el.classList.remove('selected'));
-        if(element) element.classList.add('selected');
+        element.classList.add('selected');
     }
 
     function startGame() {
         const nameInput = document.getElementById('player-name').value.trim();
         if(!nameInput) { alert("請輸入名字！"); return; }
         player.name = nameInput;
-        player.avatar = selectedAvatar;
+        player.avatarId = selectedAvatarId; 
         saveGame();
         showScreen('screen-home');
         updateHomeVisuals();
@@ -324,9 +366,11 @@
 
     function updateHomeVisuals() {
         document.getElementById('display-name').innerText = player.name;
-        document.getElementById('l-base').innerText = player.avatar;
-        const fBase = document.getElementById('f-base');
-        if(fBase) fBase.innerText = player.avatar;
+        
+        // 更新主角圖片
+        document.getElementById('l-base-img').src = player.avatarId;
+        const fBaseImg = document.getElementById('f-base-img');
+        if(fBaseImg) fBaseImg.src = player.avatarId;
 
         stages.forEach((stage, idx) => {
             const el = document.getElementById(stage.layerId);
@@ -356,20 +400,18 @@
         showScreen('screen-story');
     }
 
-    // --- 核心修正：題目產生器 ---
     function getRandomInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
 
     function startQuiz() {
         showScreen('screen-quiz');
-        const container = document.getElementById('quiz-list'); // 確保這裡抓到元素
-        container.innerHTML = ''; // 清空舊題目
+        const container = document.getElementById('quiz-list');
+        container.innerHTML = ''; 
         currentQuestions = [];
         
         const stage = stages[player.level];
         
         for(let i=0; i<5; i++) {
             const type = stage.quizType[Math.floor(Math.random() * stage.quizType.length)];
-            // 呼叫產生題目
             createQuestion(i, type, stage.diff);
         }
     }
@@ -407,11 +449,7 @@
         const div = document.createElement('div');
         div.className = 'question-row';
         div.innerHTML = `<span>${index+1}. ${html}</span> <input type="number" id="ans-${index}" inputmode="numeric">`; 
-        
-        // --- 關鍵修正：這裡原本報錯，現在修好了 ---
         document.getElementById('quiz-list').appendChild(div); 
-        // ----------------------------------------
-        
         currentQuestions.push(q);
     }
 
