@@ -12,14 +12,13 @@
             --light-pink: #fab1a0;
             --purple: #6c5ce7;
             --pixel-font: 'VT323', monospace;
-            /* 新增：好讀的圓滑字體，適合閱讀中文 */
-            --reading-font: "Microsoft JhengHei", "微軟正黑體", "Heiti TC", "黑體-繁", sans-serif;
+            --reading-font: "Microsoft JhengHei", "微軟正黑體", sans-serif;
         }
 
         img { image-rendering: pixelated; }
 
         body {
-            font-family: var(--reading-font); /* 預設改用好讀字體 */
+            font-family: var(--reading-font);
             background-color: var(--bg-color);
             background-image: radial-gradient(var(--light-pink) 15%, transparent 16%), radial-gradient(var(--light-pink) 15%, transparent 16%);
             background-size: 20px 20px;
@@ -99,28 +98,28 @@
             opacity: 0; 
             filter: grayscale(0%) drop-shadow(0px 0px 5px gold);
             pointer-events: none;
+            font-size: 50px; /* 預設大小 */
         }
         .layer.unlocked { opacity: 1; animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 
-        .layer-dress { top: 20px; right: 10px; font-size: 50px; z-index: 5; }
-        .layer-shoes { bottom: 10px; right: 10px; font-size: 40px; z-index: 5; }
-        .layer-hair { top: 10px; left: 10px; font-size: 50px; z-index: 5; }
-        .layer-wand { top: 50%; right: 5px; font-size: 50px; z-index: 6; }
+        .layer-dress { top: 20px; right: 10px; z-index: 5; }
+        .layer-shoes { bottom: 10px; right: 10px; z-index: 5; }
+        .layer-hair { top: 10px; left: 10px; z-index: 5; }
+        .layer-wand { top: 50%; right: 5px; z-index: 6; }
         .layer-pet { bottom: 10px; left: 10px; font-size: 60px; z-index: 6; }
         .layer-crown { top: -10px; left: 50%; transform: translateX(-50%); font-size: 60px; z-index: 7; }
 
         @keyframes popIn { 0% { transform: scale(0); } 80% { transform: scale(1.2); } 100% { transform: scale(1); } }
 
-        /* UI 元件優化 */
+        /* UI 元件 */
         h1, h2 { 
             color: var(--deep-pink); 
             margin: 5px 0; 
             text-shadow: 2px 2px 0 #fff; 
-            font-family: var(--reading-font); /* 標題改用好讀字體 */
+            font-family: var(--reading-font);
             font-weight: bold;
         }
         
-        /* 按鈕保持一點像素感，但字體好讀 */
         .pixel-btn {
             background-color: var(--deep-pink);
             border: 3px solid #000;
@@ -157,53 +156,43 @@
         }
         .avatar-opt.selected { border-color: var(--deep-pink); transform: scale(1.1) translateY(-3px); box-shadow: 5px 5px 0px rgba(232, 67, 147, 0.4); background-color: #ffeaa7; }
 
-        /* 題目區大幅優化 */
         .quiz-panel { width: 100%; text-align: left; padding-bottom: 20px; }
-        
         .question-row { 
-            background: #fff; 
-            border: 2px solid var(--purple); 
-            margin-bottom: 12px; /* 間距加大 */
-            padding: 12px; 
-            border-radius: 12px; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            font-size: 1.6rem; /* 字體加大 */
-            font-weight: bold;
-            color: #2d3436;
+            background: #fff; border: 2px solid var(--purple); margin-bottom: 12px; padding: 12px; 
+            border-radius: 12px; display: flex; justify-content: space-between; align-items: center; 
+            font-size: 1.6rem; font-weight: bold; color: #2d3436;
         }
-        
-        /* 數字輸入框 */
         .question-row input { 
-            font-size: 1.6rem; 
-            width: 80px; 
-            text-align: center; 
-            border: 2px solid #ccc; 
-            border-radius: 8px; 
-            font-family: var(--pixel-font); /* 數字保留像素風比較可愛 */
-            padding: 5px;
+            font-size: 1.6rem; width: 80px; text-align: center; border: 2px solid #ccc; border-radius: 8px; font-family: var(--pixel-font); padding: 5px;
         }
-        
         .correct-ans { color: #00b894; font-size: 1.2rem; margin-left: 5px; font-weight: bold; }
 
         .story-card { background: #fff; padding: 20px; border: 4px dashed var(--purple); border-radius: 15px; max-width: 90%; }
+        .story-text { font-size: 1.6rem; line-height: 1.6; color: #2d3436; margin-bottom: 20px; text-align: left; font-weight: bold; }
+        .item-preview { font-size: 5rem; animation: float 2s infinite ease-in-out; margin: 10px 0; }
         
-        /* 故事文字優化 */
-        .story-text { 
-            font-size: 1.6rem; 
-            line-height: 1.6; 
-            color: #2d3436; 
-            margin-bottom: 20px; 
-            text-align: left;
+        /* 裝備描述卡 */
+        .reward-desc {
+            background: #fff5e6;
+            border: 2px solid #fab1a0;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 1.4rem;
+            color: #d35400;
+            margin: 10px 0;
             font-weight: bold;
         }
-        
-        .item-preview { font-size: 5rem; animation: float 2s infinite ease-in-out; margin: 10px 0; }
+        .praise-text {
+            color: #27ae60;
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-shadow: 1px 1px 0 #fff;
+            margin-top: 10px;
+            animation: bounce 2s infinite;
+        }
 
         @keyframes float { 0%, 100% {transform: translateY(0);} 50% {transform: translateY(-10px);} }
         @keyframes bounce { 0%, 100% {transform: scale(1);} 50% {transform: scale(1.1);} }
-
         .firework { position: absolute; width: 10px; height: 10px; border-radius: 50%; animation: explode 1s ease-out forwards; pointer-events: none; }
         @keyframes explode { to { transform: scale(10); opacity: 0; } }
     </style>
@@ -234,12 +223,12 @@
             </div>
             <div class="princess-stage">
                 <img id="l-base-img" src="" class="layer-base-img">
-                <div id="l-dress" class="layer layer-dress">👗</div>
-                <div id="l-shoes" class="layer layer-shoes">👠</div>
-                <div id="l-hair" class="layer layer-hair">🎀</div>
-                <div id="l-wand" class="layer layer-wand">🪄</div>
-                <div id="l-pet" class="layer layer-pet">🦄</div>
-                <div id="l-crown" class="layer layer-crown">👑</div>
+                <div id="l-dress" class="layer layer-dress"></div>
+                <div id="l-shoes" class="layer layer-shoes"></div>
+                <div id="l-hair" class="layer layer-hair"></div>
+                <div id="l-wand" class="layer layer-wand"></div>
+                <div id="l-pet" class="layer layer-pet"></div>
+                <div id="l-crown" class="layer layer-crown"></div>
             </div>
             <div id="status-text" style="font-size: 1.4rem; color: #636e72; margin-top:10px; font-weight:bold;">準備參加皇家舞會...</div>
             <button id="next-level-btn" class="pixel-btn" onclick="enterStoryMode()">前往下一章</button>
@@ -248,7 +237,7 @@
         <div id="screen-story" class="screen-section">
             <div class="story-card">
                 <h2 id="story-title" style="font-size: 2rem;">第一章</h2>
-                <div id="story-reward-icon" class="item-preview">👗</div>
+                <div id="story-reward-icon" class="item-preview">❓</div>
                 <p id="story-content" class="story-text">故事內容...</p>
                 <button class="pixel-btn" onclick="startQuiz()">接受試煉</button>
             </div>
@@ -263,22 +252,28 @@
         </div>
 
         <div id="screen-success" class="screen-section">
-            <h1 style="font-size:3rem;">✨ 試煉成功 ✨</h1>
-            <p style="font-size:1.8rem; font-weight:bold;">你獲得了：<span id="reward-name" style="color:var(--deep-pink);"></span></p>
-            <div id="reward-display" style="font-size:8rem; animation: bounce 1s infinite;"></div>
-            <button class="pixel-btn" onclick="goHome()">穿上裝備</button>
+            <h1 style="font-size:2.5rem;">✨ 試煉成功 ✨</h1>
+            <div id="praise-display" class="praise-text">你真是個天才！</div>
+            
+            <p style="font-size:1.5rem; margin:10px 0;">你獲得了稀有寶物：</p>
+            <div id="reward-display" style="font-size:6rem; animation: bounce 1s infinite;"></div>
+            
+            <p id="reward-name" style="color:var(--deep-pink); font-size:2rem; font-weight:bold; margin:0;"></p>
+            <div id="reward-desc" class="reward-desc">這是一件傳說中的寶物</div>
+            
+            <button class="pixel-btn" onclick="goHome()">放入背包</button>
         </div>
         
         <div id="screen-final" class="screen-section">
             <h1 style="color:#d63031; font-size:2.5rem;">🎉 完美公主誕生 🎉</h1>
             <div class="princess-stage" style="transform: scale(1.1); margin: 20px auto; background: linear-gradient(to top, #fff 0%, #fff0f5 100%); border-radius: 20px;">
                  <img id="f-base-img" src="" class="layer-base-img">
-                 <div class="layer layer-dress unlocked">👗</div>
-                 <div class="layer layer-shoes unlocked">👠</div>
-                 <div class="layer layer-hair unlocked">🎀</div>
-                 <div class="layer layer-wand unlocked">🪄</div>
-                 <div class="layer layer-pet unlocked">🦄</div>
-                 <div class="layer layer-crown unlocked">👑</div>
+                 <div class="layer layer-dress unlocked" id="f-dress"></div>
+                 <div class="layer layer-shoes unlocked" id="f-shoes"></div>
+                 <div class="layer layer-hair unlocked" id="f-hair"></div>
+                 <div class="layer layer-wand unlocked" id="f-wand"></div>
+                 <div class="layer layer-pet unlocked" id="f-pet"></div>
+                 <div class="layer layer-crown unlocked" id="f-crown"></div>
             </div>
             <p style="font-size:1.8rem; font-weight:bold;">[NAME] 公主太美了！</p>
             <button class="pixel-btn" onclick="resetGame()">重新開始冒險</button>
@@ -288,25 +283,73 @@
 </div>
 
 <script>
-    let player = { name: "", avatarId: "1.jpg", level: 0, unlocked: [false, false, false, false, false, false] };
+    // --- 資料結構更新：Inventory 記錄具體拿到的物品 ---
+    let player = { 
+        name: "", 
+        avatarId: "1.jpg", 
+        level: 0, 
+        inventory: { dress:null, shoes:null, hair:null, wand:null, pet:null, crown:null }
+    };
     let selectedAvatarId = "1.jpg"; 
 
-    // --- 題庫擴充設定 ---
-    const stages = [
-        { title: "第一章：衣櫥魔法", text: "衣櫥空空的！請解開「加法」謎題，變出美麗的禮服！", itemIcon: "👗", itemName: "星空禮服", layerId: "l-dress", quizType: ["add", "missing"], diff: {min:10, max:50} },
-        { title: "第二章：尋找鞋子", text: "光著腳丫怎麼跳舞？用「減法」或「填空」找回玻璃鞋！", itemIcon: "👠", itemName: "玻璃鞋", layerId: "l-shoes", quizType: ["sub", "missing"], diff: {min:20, max:60} },
-        { title: "第三章：整理頭髮", text: "頭髮亂糟糟，觀察「數字規律」變出漂亮的蝴蝶結！", itemIcon: "🎀", itemName: "蝴蝶結", layerId: "l-hair", quizType: ["mul", "sequence"], diff: {min:2, max:9} },
-        { title: "第四章：時間管理", text: "舞會幾點開始？算出正確的「時間」才能出發！", itemIcon: "🪄", itemName: "魔法棒", layerId: "l-wand", quizType: ["clock"], diff: {} },
-        { title: "第五章：神獸夥伴", text: "路途太遠了，用「應用題」召喚獨角獸載我們一程！", itemIcon: "🦄", itemName: "獨角獸", layerId: "l-pet", quizType: ["word"], diff: {min:20, max:80} },
-        { title: "最終章：女王加冕", text: "證明你的智慧，通過綜合考驗贏得女王皇冠！", itemIcon: "👑", itemName: "女王皇冠", layerId: "l-crown", quizType: ["add", "sub", "mul", "sequence", "word"], diff: {min:10, max:99} }
+    // --- 隨機寶物庫 (Loot Table) ---
+    const lootPool = {
+        dress: [
+            { icon: "👗", name: "星空禮服", desc: "上面閃爍著星星的光芒！" },
+            { icon: "👘", name: "櫻花和服", desc: "散發著淡淡的花香。" },
+            { icon: "🧜‍♀️", name: "人魚禮服", desc: "在陽光下會變成彩虹色。" },
+            { icon: "💃", name: "熱情舞裙", desc: "穿上它就想跳舞！" }
+        ],
+        shoes: [
+            { icon: "👠", name: "玻璃鞋", desc: "小心不要跑丟了喔！" },
+            { icon: "👡", name: "黃金涼鞋", desc: "國王送的珍貴禮物。" },
+            { icon: "👢", name: "冒險長靴", desc: "走再遠的路都不會累。" }
+        ],
+        hair: [
+            { icon: "🎀", name: "絲綢蝴蝶結", desc: "用最柔軟的絲綢做的。" },
+            { icon: "🌸", name: "花朵髮圈", desc: "蜜蜂可能會飛過來喔！" },
+            { icon: "💎", name: "寶石髮夾", desc: "閃亮亮的非常耀眼。" }
+        ],
+        wand: [
+            { icon: "🪄", name: "星光魔杖", desc: "揮舞時會有流星出現。" },
+            { icon: "🍭", name: "甜心手杖", desc: "擁有甜蜜的魔法力量。" },
+            { icon: "🌙", name: "月亮權杖", desc: "吸收了滿月的能量。" }
+        ],
+        pet: [
+            { icon: "🦄", name: "彩虹獨角獸", desc: "它最喜歡吃紅蘿蔔！" },
+            { icon: "🐉", name: "噴火小龍", desc: "冬天抱著它很溫暖。" },
+            { icon: "🐈", name: "魔法貓咪", desc: "它會說人類的語言喔。" },
+            { icon: "🕊️", name: "和平鴿", desc: "會帶來好消息的鳥兒。" }
+        ],
+        crown: [
+            { icon: "👑", name: "女王皇冠", desc: "統治著數學王國的象徵。" },
+            { icon: "🧢", name: "智慧帽", desc: "戴上它，算術變超快！" },
+            { icon: "🌻", name: "太陽花冠", desc: "永遠充滿活力與希望。" }
+        ]
+    };
+
+    // --- 正面鼓勵語錄 ---
+    const praises = [
+        "你真是個數學天才！", "太棒了！你的大腦在發光！", "完美的表現！", "這種題目難不倒你！", 
+        "哇！你進步好多喔！", "這是公主級的智慧！", "繼續保持，你超強的！"
     ];
 
-    // 應用題庫擴充 (支援 {n1}, {n2} 變數)
+    // --- 關卡設定 (Slot 對應寶物庫的 key) ---
+    const stages = [
+        { title: "第一章：衣櫥魔法", text: "衣櫥空空的！請解開「加法」謎題，變出禮服！", slot: "dress", quizType: ["add", "missing"], diff: {min:10, max:50} },
+        { title: "第二章：尋找鞋子", text: "光著腳丫怎麼跳舞？用「減法」或「填空」找回鞋子！", slot: "shoes", quizType: ["sub", "missing"], diff: {min:20, max:60} },
+        { title: "第三章：整理頭髮", text: "頭髮亂糟糟，觀察「數字規律」變出漂亮的髮飾！", slot: "hair", quizType: ["mul", "sequence"], diff: {min:2, max:9} },
+        { title: "第四章：時間管理", text: "舞會幾點開始？算出正確的「時間」才能出發！", slot: "wand", quizType: ["clock"], diff: {} },
+        { title: "第五章：神獸夥伴", text: "路途太遠了，用「應用題」召喚小夥伴載我們！", slot: "pet", quizType: ["word"], diff: {min:20, max:80} },
+        { title: "最終章：加冕時刻", text: "證明你的智慧，通過綜合考驗贏得皇冠！", slot: "crown", quizType: ["add", "sub", "mul", "sequence", "word"], diff: {min:10, max:99} }
+    ];
+
+    // 應用題庫
     const wordProblems = [
         { text: "公主有 {n1} 顆寶石，國王又給了她 {n2} 顆，現在有幾顆？", op: "+" },
         { text: "花園裡有 {n1} 朵玫瑰，採走了 {n2} 朵，還剩幾朵？", op: "-" },
         { text: "宴會上有 {n1} 個盤子，打破了 {n2} 個，還剩幾個？", op: "-" },
-        { text: "每隻青蛙有 4 條腿，{n1} 隻青蛙共有幾條腿？", op: "mul_fix_4" }, // 特殊類型
+        { text: "每隻青蛙有 4 條腿，{n1} 隻青蛙共有幾條腿？", op: "mul_fix_4" }, 
         { text: "一盒馬卡龍有 {n1} 個，買了 {n2} 盒，總共有幾個？", op: "*" },
         { text: "排隊進城堡，小公主前面有 {n1} 人，後面有 {n2} 人，這一排共有幾人？(記得加自己)", op: "queue" },
         { text: "一枝魔法筆賣 {n2} 元，公主買了 1 枝，付了 {n1} 元，要找回幾元？", op: "-" },
@@ -316,16 +359,17 @@
     ];
 
     let currentQuestions = [];
+    let currentLoot = null; // 暫存這關拿到的寶物
 
     window.onload = function() {
-        // 預設選中第一個
         const firstOpt = document.querySelector('.avatar-opt[data-id="1.jpg"]');
         if(firstOpt) selectAvatar(firstOpt);
 
         try {
             if(localStorage.getItem('princessStorySave')) {
                 const saved = JSON.parse(localStorage.getItem('princessStorySave'));
-                if(saved && saved.name) {
+                // 簡單檢查存檔版本，如果沒有 inventory 就視為舊版重置
+                if(saved && saved.name && saved.inventory) {
                     player = saved;
                     showScreen('screen-home');
                     updateHomeVisuals();
@@ -335,7 +379,7 @@
     };
 
     function saveGame() { try { localStorage.setItem('princessStorySave', JSON.stringify(player)); } catch (e) {} }
-    function resetGame() { if(confirm("重置進度？")) { try { localStorage.removeItem('princessStorySave'); } catch(e){} location.reload(); } }
+    function resetGame() { if(confirm("確定要重置進度嗎？所有裝備都會消失喔！")) { try { localStorage.removeItem('princessStorySave'); } catch(e){} location.reload(); } }
 
     function selectAvatar(element) {
         selectedAvatarId = element.dataset.id;
@@ -364,16 +408,26 @@
         const fBaseImg = document.getElementById('f-base-img');
         if(fBaseImg) fBaseImg.src = player.avatarId;
 
-        stages.forEach((stage, idx) => {
-            const el = document.getElementById(stage.layerId);
-            if(el && player.unlocked[idx]) el.classList.add('unlocked');
-            else if (el) el.classList.remove('unlocked');
-        });
+        // 更新首頁與最終頁的裝備顯示 (從 player.inventory 讀取)
+        updateLayer('l-dress', 'dress');
+        updateLayer('l-shoes', 'shoes');
+        updateLayer('l-hair', 'hair');
+        updateLayer('l-wand', 'wand');
+        updateLayer('l-pet', 'pet');
+        updateLayer('l-crown', 'crown');
+        
+        // 最終頁面
+        updateLayer('f-dress', 'dress');
+        updateLayer('f-shoes', 'shoes');
+        updateLayer('f-hair', 'hair');
+        updateLayer('f-wand', 'wand');
+        updateLayer('f-pet', 'pet');
+        updateLayer('f-crown', 'crown');
 
         if(player.level >= 6) {
             document.getElementById('status-text').innerText = "收集完成！";
             const btn = document.getElementById('next-level-btn');
-            btn.innerText = "加冕典禮";
+            btn.innerText = "參加加冕典禮";
             btn.onclick = () => showFinal();
         } else {
             document.getElementById('status-text').innerText = `第 ${player.level + 1} 章：${stages[player.level].title}`;
@@ -383,12 +437,26 @@
         }
     }
 
+    function updateLayer(elementId, slot) {
+        const el = document.getElementById(elementId);
+        if(!el) return;
+        
+        const item = player.inventory[slot];
+        if(item) {
+            el.innerText = item.icon;
+            el.classList.add('unlocked');
+        } else {
+            el.innerText = "";
+            el.classList.remove('unlocked');
+        }
+    }
+
     function enterStoryMode() {
         if(player.level >= 6) return;
         const stage = stages[player.level];
         document.getElementById('story-title').innerText = stage.title;
         document.getElementById('story-content').innerText = stage.text;
-        document.getElementById('story-reward-icon').innerText = stage.itemIcon;
+        document.getElementById('story-reward-icon').innerText = "❓"; // 隨機驚喜
         showScreen('screen-story');
     }
 
@@ -399,16 +467,13 @@
         const container = document.getElementById('quiz-list');
         container.innerHTML = ''; 
         currentQuestions = [];
-        
         const stage = stages[player.level];
-        
         for(let i=0; i<5; i++) {
             const type = stage.quizType[Math.floor(Math.random() * stage.quizType.length)];
             createQuestion(i, type, stage.diff);
         }
     }
 
-    // --- 題目生成邏輯大升級 ---
     function createQuestion(index, type, diff) {
         let q = { ans: null };
         let html = '';
@@ -418,62 +483,34 @@
 
         if(type === 'add') {
             n1 = getRandomInt(min, max); n2 = getRandomInt(min, max);
-            q.ans = n1 + n2;
-            html = `${n1} + ${n2} = ?`;
+            q.ans = n1 + n2; html = `${n1} + ${n2} = ?`;
         } else if(type === 'sub') {
             n1 = getRandomInt(min, max); n2 = getRandomInt(min, max);
             if(n1 < n2) [n1, n2] = [n2, n1];
-            q.ans = n1 - n2;
-            html = `${n1} - ${n2} = ?`;
+            q.ans = n1 - n2; html = `${n1} - ${n2} = ?`;
         } else if(type === 'mul') {
             n1 = getRandomInt(2, 9); n2 = getRandomInt(2, 9);
-            q.ans = n1 * n2;
-            html = `${n1} × ${n2} = ?`;
-        } else if(type === 'missing') { // 新題型：填空
-            n1 = getRandomInt(min, max); 
-            let result = getRandomInt(n1 + 5, n1 + 20);
-            q.ans = result - n1;
-            html = `${n1} + ( ? ) = ${result}`;
-        } else if(type === 'sequence') { // 新題型：數列
-            let start = getRandomInt(1, 10);
-            let step = getRandomInt(2, 5); // 間隔 2~5
-            // 產生 3 個數字，問第 4 個
+            q.ans = n1 * n2; html = `${n1} × ${n2} = ?`;
+        } else if(type === 'missing') {
+            n1 = getRandomInt(min, max); let result = getRandomInt(n1 + 5, n1 + 20);
+            q.ans = result - n1; html = `${n1} + ( ? ) = ${result}`;
+        } else if(type === 'sequence') {
+            let start = getRandomInt(1, 10); let step = getRandomInt(2, 5);
             let s1 = start, s2 = start+step, s3 = start+step*2;
-            q.ans = start + step*3;
-            html = `${s1}, ${s2}, ${s3}, ( ? )`;
+            q.ans = start + step*3; html = `${s1}, ${s2}, ${s3}, ( ? )`;
         } else if(type === 'clock') {
-            let h = getRandomInt(1, 9);
-            let addH = getRandomInt(1, 3);
-            q.ans = h + addH;
-            html = `現在 ${h} 點，過了 ${addH} 小時是幾點？`;
+            let h = getRandomInt(1, 9); let addH = getRandomInt(1, 3);
+            q.ans = h + addH; html = `現在 ${h} 點，過了 ${addH} 小時是幾點？`;
         } else if(type === 'word') {
-             // 從擴充的題庫隨機抓一題
              let p = wordProblems[getRandomInt(0, wordProblems.length - 1)];
-             
-             // 產生數字
-             if(p.op === 'mul_fix_4') {
-                 n1 = getRandomInt(2, 9);
-                 n2 = 0; // 沒用到
-                 q.ans = n1 * 4;
-             } else if(p.op === 'queue') {
-                 n1 = getRandomInt(3, 10);
-                 n2 = getRandomInt(3, 10);
-                 q.ans = n1 + n2 + 1; // 前面+後面+自己
-             } else {
-                 n1 = getRandomInt(min, max);
-                 n2 = getRandomInt(5, 15);
-                 if(p.op === '-') {
-                     if(n1 < n2) [n1, n2] = [n2, n1];
-                     q.ans = n1 - n2;
-                 } else if(p.op === '+') {
-                     q.ans = n1 + n2;
-                 } else if(p.op === '*') {
-                     n1 = getRandomInt(2, 6); n2 = getRandomInt(2, 5);
-                     q.ans = n1 * n2;
-                 } else if(p.op === 'time_add') {
-                     n1 = getRandomInt(1, 4);
-                     q.ans = 2 + n1;
-                 }
+             if(p.op === 'mul_fix_4') { n1 = getRandomInt(2, 9); n2=0; q.ans = n1 * 4; }
+             else if(p.op === 'queue') { n1 = getRandomInt(3, 10); n2 = getRandomInt(3, 10); q.ans = n1 + n2 + 1; }
+             else {
+                 n1 = getRandomInt(min, max); n2 = getRandomInt(5, 15);
+                 if(p.op === '-') { if(n1 < n2) [n1, n2] = [n2, n1]; q.ans = n1 - n2; }
+                 else if(p.op === '+') q.ans = n1 + n2;
+                 else if(p.op === '*') { n1 = getRandomInt(2, 6); n2 = getRandomInt(2, 5); q.ans = n1 * n2; }
+                 else if(p.op === 'time_add') { n1 = getRandomInt(1, 4); q.ans = 2 + n1; }
              }
              html = p.text.replace('{n1}', n1).replace('{n2}', n2);
         }
@@ -490,16 +527,10 @@
         currentQuestions.forEach((q, idx) => {
             const input = document.getElementById(`ans-${idx}`);
             if(parseInt(input.value) === q.ans) {
-                input.style.borderColor = "#00b894";
-                input.style.backgroundColor = "#d4edda";
+                input.style.borderColor = "#00b894"; input.style.backgroundColor = "#d4edda";
                 correctCount++;
             } else {
-                input.style.borderColor = "#d63031";
-                input.style.backgroundColor = "#fab1a0";
-                const span = document.createElement('span');
-                span.className = "correct-ans";
-                span.innerText = `(${q.ans})`;
-                if(!input.parentNode.querySelector('.correct-ans')) input.parentNode.appendChild(span);
+                input.style.borderColor = "#d63031"; input.style.backgroundColor = "#fab1a0";
             }
         });
 
@@ -512,12 +543,25 @@
 
     function levelClear() {
         const stage = stages[player.level];
-        document.getElementById('reward-name').innerText = stage.itemName;
-        document.getElementById('reward-display').innerText = stage.itemIcon;
+        const slot = stage.slot;
         
-        player.unlocked[player.level] = true;
+        // --- 隨機抽取寶物 ---
+        const possibleItems = lootPool[slot];
+        const newItem = possibleItems[Math.floor(Math.random() * possibleItems.length)];
+        
+        // 隨機鼓勵語
+        const randomPraise = praises[Math.floor(Math.random() * praises.length)];
+
+        // 存入玩家背包
+        player.inventory[slot] = newItem;
         player.level++;
         saveGame();
+
+        // 顯示結果
+        document.getElementById('praise-display').innerText = randomPraise;
+        document.getElementById('reward-display').innerText = newItem.icon;
+        document.getElementById('reward-name').innerText = newItem.name;
+        document.getElementById('reward-desc').innerText = newItem.desc;
 
         showScreen('screen-success');
         for(let i=0; i<15; i++) createFirework();
