@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>公主的像素數學魔法</title>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #ffeaa7;
+            --screen-bg: #ffe0e9; /* 粉紅背景 */
+            --border-color: #6c5ce7; /* 紫色邊框 */
+            --accent-color: #e84393; /* 深粉紅按鈕 */
+            --text-color: #2d3436;
+            --pixel-border: 4px solid var(--border-color);
+        }
+
+        body {
+            font-family: 'VT323', monospace;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            background-image: radial-gradient(#fab1a0 15%, transparent 16%), radial-gradient(#fab1a0 15%, transparent 16%);
+            background-size: 20px 20px;
+        }
+
+        .game-console {
+            background-color: #fff0f5;
+            padding: 15px;
+            border-radius: 20px;
+            border: var(--pixel-border);
+            box-shadow: 8px 8px 0px rgba(108, 92, 231, 0.4);
+            max-width: 800px;
+            width: 100%;
+            position: relative;
+        }
+
+        /* 頂部狀態欄 */
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fff;
+            border: 2px solid var(--border-color);
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+        }
+
+        .level-info {
+            font-size: 1.5rem;
+            color: var(--accent-color);
+        }
+
+        .exp-bar-container {
+            width: 200px;
+            height: 20px;
+            background: #eee;
+            border: 2px solid #000;
+            margin-left: 10px;
+            position: relative;
+        }
+
+        .exp-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #fd79a8, #e84393);
+            width: 0%;
+            transition: width 0.5s ease-out;
+        }
+
+        /* 裝備欄 */
+        .inventory {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 10px 0;
+            border-bottom: 2px dashed var(--accent-color);
+            margin-bottom: 15px;
+        }
+
+        .item-slot {
+            width: 50px;
+            height: 50px;
+            border: 2px solid var(--border-color);
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            position: relative;
+            opacity: 0.3; /* 未解鎖半透明 */
+            transition: all 0.3s;
+        }
+
+        .item-slot.unlocked {
+            opacity: 1;
+            background: #fff5e6;
+            box-shadow: 2px 2px 0px rgba(0,0,0,0.1);
+            border-color: #fdcb6e;
+        }
+
+        .item-slot .tooltip {
+            visibility: hidden;
+            width: 100px;
+            background-color: var(--text-color);
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 100%;
+            left: 50%;
+            margin-left: -50px;
+            font-size: 1rem;
+        }
+
+        .item-slot:hover .tooltip {
+            visibility: visible;
+        }
+
+        .screen {
+            background-color: var(--screen-bg);
+            border: var(--pixel-border);
+            padding: 20px;
+            border-radius: 10px;
+            min-height: 300px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.2rem;
+            color: var(--accent-color);
+            margin: 0 0 20px 0;
+            text-shadow: 2px 2px 0px #fff;
+        }
+
+        .controls {
+            text-align: center;
+            margin-bottom: 20px;
+            background: rgba(255,255,255,0.6);
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        /* 公主風格按鈕 */
+        .pixel-btn {
+            background-color: var(--accent-color);
+            border: 2px solid #000;
+            color: #fff;
+            padding: 10px 25px;
+            font-family: 'VT323', monospace;
+            font-size: 1.4rem;
+            cursor: pointer;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.2);
+            transition: transform 0.1s;
+            margin: 5px;
+            border-radius: 5px;
+        }
+
+        .pixel-btn:hover {
+            background-color: #d63031;
+        }
+
+        .pixel-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+        }
+
+        .question-card {
+            border: 2px solid #fff;
+            background: rgba(255, 255, 255, 0.8);
+            margin-bottom: 15px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 3px 3px 0px rgba(232, 67, 147, 0.2);
+        }
+
+        input[type="number"], input[type="text"] {
+            font-family: 'VT323', monospace;
+            font-size: 1.5rem;
+            width: 80px;
+            padding: 5px;
+            border: 2px solid var(--border-color);
+            border-radius: 5px;
+            background: #fff;
+            color: var(--accent-color);
+            text-align: center;
+        }
+
+        canvas {
+            background: #fff;
+            border-radius: 50%;
+            border: 4px solid var(--accent-color);
+            margin-right: 15px;
+        }
+
+        .tag {
+            background: var(--border-color);
+            color: #fff;
+            font-size: 0.9rem;
+            padding: 4px 8px;
+            margin-right: 10px;
+            border-radius: 4px;
+        }
+
+        /* 升級與獎勵動畫區域 */
+        #modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: #fff;
+            padding: 30px;
+            border: 6px solid gold;
+            text-align: center;
+            border-radius: 20px;
+            animation: popIn 0.5s;
+            max-width: 400px;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0); }
+            80% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .level-up-text {
+            color: var(--accent-color);
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .item-reveal {
+            font-size: 5rem;
+            margin: 20px 0;
+            animation: float 2s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="game-console">
+    
+    <div class="status-bar">
+        <div style="display:flex; align-items:center;">
+            <span id="player-avatar" style="font-size: 2.5rem; margin-right:10px;">👧</span>
+            <div>
+                <div class="level-info">Lv.<span id="level-display">1</span> <span id="title-display">見習公主</span></div>
+                <div class="exp-bar-container">
+                    <div id="exp-bar" class="exp-bar-fill"></div>
+                </div>
+            </div>
+        </div>
+        <button class="pixel-btn" style="font-size:1rem; padding:5px 10px; background:#b2bec3;" onclick="resetProgress()">重置進度</button>
+    </div>
+
+    <div class="inventory" id="inventory-container">
+        </div>
+
+    <div class="screen">
+        <h1>✨ 魔法數學試煉 ✨</h1>
+        
+        <div class="controls">
+            <label><input type="checkbox" id="opt-add" checked> 加法魔法</label>
+            <label><input type="checkbox" id="opt-sub" checked> 減法魔法</label>
+            <label><input type="checkbox" id="opt-mul" checked> 乘法結界</label>
+            <label><input type="checkbox" id="opt-clock" checked> 時間之輪</label>
+            <label><input type="checkbox" id="opt-word" checked> 智慧考驗</label>
+            <br><br>
+            <button class="pixel-btn" onclick="generateQuiz()">召喚題目 (10題)</button>
+        </div>
+
+        <div id="quiz-container">
+            <p style="text-align: center; color: #636e72;">準備好了嗎，公主殿下？<br>點擊上方按鈕開始收集魔法寶石！</p>
+        </div>
+
+        <div id="submit-area" style="text-align: center; display: none; margin-top:20px;">
+            <button class="pixel-btn" style="background-color: #00b894;" onclick="checkAnswers()">施展魔法 (提交)</button>
+        </div>
+
+        <div id="result-area" style="display: none; background: rgba(255,255,255,0.7); padding: 15px; margin-top: 20px; border-radius:10px;">
+            <div id="score-display" style="font-size: 2rem; font-weight: bold; color: var(--accent-color);"></div>
+            <div id="feedback-display" style="margin-top: 10px; line-height: 1.4;"></div>
+        </div>
+    </div>
+</div>
+
+<div id="modal-overlay">
+    <div class="modal-content">
+        <div class="level-up-text">LEVEL UP!</div>
+        <p style="font-size:1.5rem;">恭喜升級！獲得新寶物：</p>
+        <div id="new-item-icon" class="item-reveal">👑</div>
+        <div id="new-item-name" style="font-size:1.5rem; font-weight:bold; color:#6c5ce7;">皇冠</div>
+        <button class="pixel-btn" onclick="closeModal()">太棒了！</button>
+    </div>
+</div>
+
+<script>
+    // --- 遊戲資料設定 ---
+    const gameData = {
+        level: 1,
+        xp: 0,
+        xpToNext: 100,
+        items: [] // 儲存已解鎖的 item ID
+    };
+
+    // 道具清單 (Level 對應獎勵)
+    const rewards = [
+        { lvl: 2, icon: "🎀", name: "緞帶", desc: "初級裝飾" },
+        { lvl: 3, icon: "🍭", name: "波板糖", desc: "補充魔力" },
+        { lvl: 4, icon: "🧸", name: "泰迪熊", desc: "忠實夥伴" },
+        { lvl: 5, icon: "👠", name: "玻璃鞋", desc: "跑得更快" },
+        { lvl: 6, icon: "💍", name: "寶石戒", desc: "閃閃發光" },
+        { lvl: 7, icon: "👗", name: "禮服", desc: "參加舞會" },
+        { lvl: 8, icon: "🦄", name: "獨角獸", desc: "神獸坐騎" },
+        { lvl: 9, icon: "🪄", name: "魔法棒", desc: "高階法力" },
+        { lvl: 10, icon: "👑", name: "女王冠", desc: "王國統治者" }
+    ];
+
+    const titles = ["見習生", "初級公主", "魔法少女", "皇家公主", "女王陛下"];
+
+    // --- 系統初始化與存檔讀取 ---
+    window.onload = function() {
+        loadGame();
+        updateUI();
+        renderInventory();
+    };
+
+    function loadGame() {
+        const saved = localStorage.getItem('princessMathSave');
+        if (saved) {
+            const parsed = JSON.parse(saved);
+            gameData.level = parsed.level || 1;
+            gameData.xp = parsed.xp || 0;
+            gameData.xpToNext = parsed.xpToNext || 100;
+            gameData.items = parsed.items || [];
+        }
+    }
+
+    function saveGame() {
+        localStorage.setItem('princessMathSave', JSON.stringify(gameData));
+    }
+
+    function resetProgress() {
+        if(confirm("確定要重置所有等級和寶物嗎？無法復原喔！")) {
+            localStorage.removeItem('princessMathSave');
+            location.reload();
+        }
+    }
+
+    // --- UI 更新邏輯 ---
+    function updateUI() {
+        document.getElementById('level-display').innerText = gameData.level;
+        
+        // 更新稱號
+        let titleIndex = Math.floor((gameData.level - 1) / 2);
+        if(titleIndex >= titles.length) titleIndex = titles.length - 1;
+        document.getElementById('title-display').innerText = titles[titleIndex];
+
+        // 更新頭像
+        const avatarMap = ["👧", "👩‍🎓", "👸", "🧚‍♀️", "👸👑"];
+        document.getElementById('player-avatar').innerText = avatarMap[Math.min(titleIndex, 4)];
+
+        // 更新經驗條
+        const percent = (gameData.xp / gameData.xpToNext) * 100;
+        document.getElementById('exp-bar').style.width = percent + "%";
+    }
+
+    function renderInventory() {
+        const container = document.getElementById('inventory-container');
+        container.innerHTML = '';
+        
+        // 永遠顯示所有可能的格子，未解鎖的變灰
+        rewards.forEach(r => {
+            const isUnlocked = gameData.items.includes(r.lvl);
+            const div = document.createElement('div');
+            div.className = `item-slot ${isUnlocked ? 'unlocked' : ''}`;
+            div.innerHTML = `
+                ${r.icon}
+                <span class="tooltip">${isUnlocked ? r.name : '??? (Lv.'+r.lvl+')'}</span>
+            `;
+            container.appendChild(div);
+        });
+    }
+
+    function addXP(amount) {
+        gameData.xp += amount;
+        if (gameData.xp >= gameData.xpToNext) {
+            levelUp();
+        }
+        updateUI();
+        saveGame();
+    }
+
+    function levelUp() {
+        gameData.xp = gameData.xp - gameData.xpToNext;
+        gameData.level++;
+        gameData.xpToNext = Math.floor(gameData.xpToNext * 1.2); // 升級難度增加
+        
+        // 檢查是否有獎勵
+        const reward = rewards.find(r => r.lvl === gameData.level);
+        if (reward && !gameData.items.includes(reward.lvl)) {
+            gameData.items.push(reward.lvl);
+            showLevelUpModal(reward);
+        } else {
+            // 單純升級音效或特效 (這裡用簡單 alert 替代，或可做小動畫)
+            // 這裡我們直接用通用的彈窗顯示等級提升
+             showLevelUpModal({name: "能力提升", icon: "✨"});
+        }
+        renderInventory();
+    }
+
+    function showLevelUpModal(item) {
+        document.getElementById('new-item-icon').innerText = item.icon;
+        document.getElementById('new-item-name').innerText = item.name;
+        document.getElementById('modal-overlay').style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('modal-overlay').style.display = 'none';
+    }
+
+    // --- 數學測驗邏輯 (保留原核心並優化) ---
+    let currentQuestions = [];
+    
+    function getRandomInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+
+    // 畫時鐘 (維持不變，僅顏色微調)
+    function drawClock(canvasId, hour, minute) {
+        const canvas = document.getElementById(canvasId);
+        const ctx = canvas.getContext("2d");
+        const radius = canvas.height / 2;
+        ctx.translate(radius, radius);
+        const r = radius * 0.90;
+
+        ctx.beginPath(); ctx.arc(0, 0, r, 0, 2 * Math.PI);
+        ctx.fillStyle = '#fff'; ctx.fill();
+        ctx.lineWidth = 4; ctx.strokeStyle = '#e84393'; ctx.stroke();
+
+        ctx.font = radius * 0.25 + "px VT323";
+        ctx.textBaseline = "middle"; ctx.textAlign = "center"; ctx.fillStyle = "#6c5ce7";
+        for(let num = 1; num < 13; num++){
+            let ang = num * Math.PI / 6;
+            ctx.rotate(ang); ctx.translate(0, -r * 0.80); ctx.rotate(-ang);
+            ctx.fillText(num.toString(), 0, 0);
+            ctx.rotate(ang); ctx.translate(0, r * 0.80); ctx.rotate(-ang);
+        }
+
+        let hPos = (hour % 12) * Math.PI / 6 + (minute * Math.PI / (6 * 60));
+        drawHand(ctx, hPos, r * 0.5, 5, "#2d3436");
+        let mPos = (minute * Math.PI / 30);
+        drawHand(ctx, mPos, r * 0.75, 3, "#e84393");
+        ctx.translate(-radius, -radius);
+    }
+
+    function drawHand(ctx, pos, length, width, color) {
+        ctx.beginPath(); ctx.lineWidth = width; ctx.lineCap = "round"; ctx.strokeStyle = color;
+        ctx.moveTo(0,0); ctx.rotate(pos); ctx.lineTo(0, -length); ctx.stroke(); ctx.rotate(-pos);
+    }
+
+    function generateQuiz() {
+        const container = document.getElementById('quiz-container');
+        container.innerHTML = '';
+        currentQuestions = [];
+        let types = [];
+        if(document.getElementById('opt-add').checked) types.push('add');
+        if(document.getElementById('opt-sub').checked) types.push('sub');
+        if(document.getElementById('opt-mul').checked) types.push('mul');
+        if(document.getElementById('opt-clock').checked) types.push('clock');
+        if(document.getElementById('opt-word').checked) types.push('word');
+
+        if(types.length === 0) {
+            container.innerHTML = '<p style="color:red; text-align:center;">公主殿下，請至少選擇一種魔法試煉！</p>';
+            return;
+        }
+
+        for (let i = 0; i < 10; i++) {
+            const type = types[Math.floor(Math.random() * types.length)];
+            createQuestion(i, type);
+        }
+        document.getElementById('submit-area').style.display = 'block';
+        document.getElementById('result-area').style.display = 'none';
+
+        setTimeout(() => {
+            currentQuestions.forEach((q, index) => {
+                if(q.type === 'clock') drawClock(`clock-${index}`, q.h, q.m);
+            });
+        }, 100);
+    }
+
+    function createQuestion(index, type) {
+        const container = document.getElementById('quiz-container');
+        const div = document.createElement('div');
+        div.className = 'question-card';
+        let qObj = { type: type, correct: null };
+        let html = '';
+
+        if (type === 'add') {
+            const n1 = getRandomInt(10, 99); const n2 = getRandomInt(10, 99);
+            qObj.correct = n1 + n2;
+            html = `<span class="tag">加法</span> <span>${n1} + ${n2} = ?</span>`;
+        } else if (type === 'sub') {
+            let n1 = getRandomInt(10, 99); let n2 = getRandomInt(10, 99);
+            if(n1 < n2) [n1, n2] = [n2, n1];
+            qObj.correct = n1 - n2;
+            html = `<span class="tag">減法</span> <span>${n1} - ${n2} = ?</span>`;
+        } else if (type === 'mul') {
+            const n1 = getRandomInt(2, 9); const n2 = getRandomInt(2, 9);
+            qObj.correct = n1 * n2;
+            html = `<span class="tag">乘法</span> <span>${n1} × ${n2} = ?</span>`;
+        } else if (type === 'clock') {
+            const h = getRandomInt(1, 12); const m = getRandomInt(0, 11) * 5;
+            qObj.h = h; qObj.m = m;
+            qObj.correct = `${h}:${m.toString().padStart(2, '0')}`;
+            html = `<span class="tag">時間</span> <canvas id="clock-${index}" width="80" height="80"></canvas><span>是幾點幾分?</span>`;
+        } else if (type === 'word') {
+             const scenarios = [
+                { text: "公主有 {n1} 顆寶石，國王又給了她 {n2} 顆，現在有幾顆？", op: "+", min:10, max:40 },
+                { text: "花園裡有 {n1} 朵玫瑰，採走了 {n2} 朵，還剩幾朵？", op: "-", min:20, max:50 },
+                { text: "每隻獨角獸吃 {n1} 個蘋果，{n2} 隻獨角獸共吃幾個？", op: "*", min:2, max:9 },
+                { text: "宴會 {n1} 點開始，持續 2 小時，幾點結束？", op: "time", min:1, max:9 }
+            ];
+            const s = scenarios[getRandomInt(0, scenarios.length - 1)];
+            let n1 = getRandomInt(s.min, s.max);
+            let n2 = getRandomInt(s.min, s.max);
+            if(s.op === '-') { if(n1 < n2) [n1, n2] = [n2, n1]; qObj.correct = n1 - n2; }
+            else if (s.op === '+') qObj.correct = n1 + n2;
+            else if (s.op === '*') qObj.correct = n1 * n2;
+            else if (s.op === 'time') { n2 = 2; qObj.correct = n1 + n2; }
+            
+            let qText = s.text.replace('{n1}', n1).replace('{n2}', n2);
+            html = `<span class="tag">應用</span> <span style="font-size:1.2rem; flex:1; margin:0 10px;">${qText}</span>`;
+        }
+
+        html += `<input type="text" id="ans-${index}">`;
+        div.innerHTML = html;
+        container.appendChild(div);
+        currentQuestions.push(qObj);
+    }
+
+    function checkAnswers() {
+        let correctCount = 0;
+        let earnedXP = 0;
+        let feedbackHTML = "<h3>📜 皇家成績單：</h3><ul>";
+
+        currentQuestions.forEach((q, index) => {
+            const input = document.getElementById(`ans-${index}`);
+            let val = input.value.trim();
+            let isCorrect = false;
+
+            if (q.type === 'clock') {
+                let parts = val.split(/[:：]/);
+                if(parts.length === 2 && parseInt(parts[0]) + ":" + parseInt(parts[1]).toString().padStart(2,'0') === q.correct) isCorrect = true;
+            } else {
+                if(parseInt(val) === q.correct) isCorrect = true;
+            }
+
+            if (isCorrect) {
+                input.style.backgroundColor = "#55efc4";
+                correctCount++;
+                earnedXP += 10; // 每題 10 XP
+            } else {
+                input.style.backgroundColor = "#fab1a0";
+                let span = document.createElement('span');
+                span.style.color = "#d63031"; span.style.marginLeft = "5px";
+                span.innerText = `(${q.correct})`;
+                if(!input.nextSibling || input.nextSibling.tagName !== 'SPAN') input.parentNode.appendChild(span);
+            }
+        });
+
+        // 生成評語
+        if(correctCount === 10) feedbackHTML += "<li>💖 完美！公主展現了驚人的智慧！ (+100 XP)</li>";
+        else if(correctCount >= 7) feedbackHTML += "<li>✨ 做得很好！再一點點就完美了！</li>";
+        else feedbackHTML += "<li>📚 別灰心，公主也是需要練習的！</li>";
+        feedbackHTML += "</ul>";
+
+        // 顯示結果
+        document.getElementById('result-area').style.display = 'block';
+        document.getElementById('score-display').innerText = `得分：${correctCount * 10} 分`;
+        document.getElementById('feedback-display').innerHTML = feedbackHTML;
+        document.getElementById('submit-area').style.display = 'none';
+
+        // 結算經驗值
+        if(earnedXP > 0) {
+            addXP(earnedXP);
+        }
+        
+        // 滾動到底部
+        document.getElementById('result-area').scrollIntoView({behavior: "smooth"});
+    }
+</script>
+
+</body>
+</html>
