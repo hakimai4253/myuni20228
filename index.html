@@ -37,7 +37,7 @@
             background-color: #fff0f5;
             width: 95%;
             max-width: 600px;
-            height: 95vh;
+            height: 98vh;
             border-radius: 20px;
             border: 4px solid var(--purple);
             box-shadow: 10px 10px 0px rgba(108, 92, 231, 0.4);
@@ -74,106 +74,90 @@
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- 公主舞台 (調整版) --- */
-        .princess-stage {
-            width: 260px;
-            height: 360px;
-            background: #fff;
-            border: 4px solid gold;
-            border-radius: 20px; 
+        /* --- 地圖進度條 (強制顯示版) --- */
+        .map-container {
+            width: 100%;
+            min-height: 70px;
+            margin: 10px 0;
             position: relative;
-            margin: 10px auto;
-            overflow: hidden;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.1);
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
+            padding: 5px 15px;
+            box-sizing: border-box;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 15px;
+            border: 2px dashed #fab1a0;
+        }
+        
+        .map-line-bg {
+            position: absolute; top: 50%; left: 25px; right: 25px; height: 6px;
+            background: #dfe6e9; border-radius: 3px; z-index: 0; transform: translateY(-50%);
+        }
+        
+        .map-line-fill {
+            position: absolute; top: 50%; left: 25px; height: 6px;
+            background: var(--deep-pink); border-radius: 3px; z-index: 0; transform: translateY(-50%);
+            width: 0%; transition: width 0.5s ease-out;
+        }
+
+        .map-node {
+            width: 32px; height: 32px; background: #fff; border: 3px solid #b2bec3; border-radius: 50%;
+            z-index: 1; display: flex; justify-content: center; align-items: center; font-size: 1.2rem;
+            transition: all 0.3s; color: #b2bec3;
+        }
+
+        .map-node.completed { border-color: var(--deep-pink); background: #ffeaa7; color: #000; }
+        .map-node.current { transform: scale(1.3); border-color: #00b894; background: #fff; box-shadow: 0 0 10px #00b894; animation: pulse 1.5s infinite; color: #000; font-weight: bold; }
+
+        @keyframes pulse { 0% { transform: scale(1.3); } 50% { transform: scale(1.5); } 100% { transform: scale(1.3); } }
+
+        /* --- 公主舞台 --- */
+        .princess-stage {
+            width: 240px; height: 300px; background: #fff; border: 4px solid gold; border-radius: 20px; 
+            position: relative; margin: 5px auto; overflow: hidden; box-shadow: inset 0 0 20px rgba(0,0,0,0.1);
+            display: flex; justify-content: center; align-items: center;
         }
 
         .layer-base-img { width: 100%; height: 100%; object-fit: contain; z-index: 1; }
         
         .layer {
-            position: absolute;
-            transition: all 0.5s;
-            opacity: 0; 
-            filter: grayscale(0%) drop-shadow(0px 0px 5px gold);
-            pointer-events: none;
-            font-size: 50px; 
+            position: absolute; transition: all 0.5s; opacity: 0; 
+            filter: grayscale(0%) drop-shadow(0px 0px 5px gold); pointer-events: none; font-size: 50px; 
         }
         .layer.unlocked { opacity: 1; animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 
-        /* --- 修正裝備位置 (解決重疊與消失問題) --- */
         .layer-crown { top: 5px; left: 50%; transform: translateX(-50%); font-size: 60px; z-index: 7; }
-        
-        /* 左側道具 */
         .layer-hair { top: 20px; left: 5px; font-size: 50px; z-index: 5; }
-        .layer-wand { top: 50%; left: 5px; font-size: 50px; z-index: 6; transform: translateY(-50%) rotate(-15deg); } /* 修正：移到左中 */
+        .layer-wand { top: 50%; left: 5px; font-size: 50px; z-index: 6; transform: translateY(-50%) rotate(-15deg); }
         .layer-pet { bottom: 10px; left: 5px; font-size: 55px; z-index: 6; }
-
-        /* 右側道具 */
         .layer-dress { top: 20px; right: 5px; font-size: 50px; z-index: 5; }
         .layer-shoes { bottom: 10px; right: 5px; font-size: 40px; z-index: 5; }
 
         @keyframes popIn { 0% { transform: scale(0); } 80% { transform: scale(1.2); } 100% { transform: scale(1); } }
 
         /* UI 元件 */
-        h1, h2 { 
-            color: var(--deep-pink); margin: 5px 0; text-shadow: 2px 2px 0 #fff; 
-            font-family: var(--reading-font); font-weight: bold;
-        }
+        h1, h2 { color: var(--deep-pink); margin: 5px 0; text-shadow: 2px 2px 0 #fff; font-family: var(--reading-font); font-weight: bold; }
         
         .pixel-btn {
-            background-color: var(--deep-pink);
-            border: 3px solid #000;
-            color: #fff;
-            padding: 10px 20px;
-            font-family: var(--reading-font);
-            font-weight: bold;
-            font-size: 1.4rem;
-            cursor: pointer;
-            box-shadow: 4px 4px 0px rgba(0,0,0,0.3);
-            margin: 10px;
-            border-radius: 12px;
-            touch-action: manipulation;
-            transition: all 0.1s;
+            background-color: var(--deep-pink); border: 3px solid #000; color: #fff; padding: 10px 20px;
+            font-family: var(--reading-font); font-weight: bold; font-size: 1.4rem; cursor: pointer;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.3); margin: 10px; border-radius: 12px; touch-action: manipulation; transition: all 0.1s;
         }
         .pixel-btn:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px rgba(0,0,0,0.3); }
         
-        .input-box {
-            font-family: var(--reading-font); font-size: 1.5rem; padding: 10px; border: 3px solid var(--purple);
-            border-radius: 10px; text-align: center; width: 80%; margin: 10px 0; background: #fff;
-        }
+        .input-box { font-family: var(--reading-font); font-size: 1.5rem; padding: 10px; border: 3px solid var(--purple); border-radius: 10px; text-align: center; width: 80%; margin: 10px 0; background: #fff; }
 
         .avatar-select { display: flex; gap: 10px; justify-content: center; margin: 15px 0; flex-wrap: wrap; }
-        .avatar-opt { 
-            width: 70px; height: 70px; cursor: pointer; border: 4px solid #fff; border-radius: 15px; 
-            padding: 2px; background: var(--light-pink); transition: all 0.2s; box-shadow: 3px 3px 0px rgba(0,0,0,0.1); object-fit: contain; background-color: #fff;
-        }
+        .avatar-opt { width: 60px; height: 60px; cursor: pointer; border: 3px solid #fff; border-radius: 12px; padding: 2px; background: var(--light-pink); transition: all 0.2s; box-shadow: 3px 3px 0px rgba(0,0,0,0.1); object-fit: contain; background-color: #fff; }
         .avatar-opt.selected { border-color: var(--deep-pink); transform: scale(1.1) translateY(-3px); box-shadow: 5px 5px 0px rgba(232, 67, 147, 0.4); background-color: #ffeaa7; }
 
         .quiz-panel { width: 100%; text-align: left; padding-bottom: 20px; }
-        .question-row { 
-            background: #fff; border: 2px solid var(--purple); margin-bottom: 12px; padding: 10px; 
-            border-radius: 12px; display: flex; flex-direction: column; align-items: center; 
-            font-size: 1.5rem; font-weight: bold; color: #2d3436;
-        }
+        .question-row { background: #fff; border: 2px solid var(--purple); margin-bottom: 12px; padding: 10px; border-radius: 12px; display: flex; flex-direction: column; align-items: center; font-size: 1.5rem; font-weight: bold; color: #2d3436; }
         .question-content { display: flex; align-items: center; justify-content: space-between; width: 100%; margin-bottom: 10px;}
+        .question-row input { font-size: 1.6rem; width: 80px; text-align: center; border: 2px solid #ccc; border-radius: 8px; font-family: var(--pixel-font); padding: 5px; }
         
-        /* 數字輸入框 */
-        .question-row input { 
-            font-size: 1.6rem; width: 80px; text-align: center; border: 2px solid #ccc; 
-            border-radius: 8px; font-family: var(--pixel-font); padding: 5px;
-        }
-        
-        /* 時鐘畫布 */
-        canvas.clock-canvas {
-            background: #fff;
-            border-radius: 50%;
-            border: 4px solid #2d3436;
-            margin: 10px 0;
-            box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
-        }
-
+        canvas.clock-canvas { background: #fff; border-radius: 50%; border: 4px solid #2d3436; margin: 10px 0; box-shadow: 2px 2px 5px rgba(0,0,0,0.2); }
         .correct-ans { color: #00b894; font-size: 1.2rem; margin-top: 5px; font-weight: bold; }
 
         .story-card { background: #fff; padding: 20px; border: 4px dashed var(--purple); border-radius: 15px; max-width: 90%; }
@@ -199,20 +183,34 @@
             <p style="font-size: 1.4rem;">請輸入公主的名字：</p>
             <input type="text" id="player-name" class="input-box" placeholder="例如: 艾莎" maxlength="8">
             <p style="font-size: 1.4rem; margin-top: 15px;">選擇你的樣子：</p>
+            
             <div class="avatar-select">
                 <img src="1.jpg" class="avatar-opt" data-id="1.jpg" onclick="selectAvatar(this)" onerror="this.src='https://via.placeholder.com/80?text=P1'">
                 <img src="2.jpg" class="avatar-opt" data-id="2.jpg" onclick="selectAvatar(this)" onerror="this.src='https://via.placeholder.com/80?text=P2'">
                 <img src="3.jpg" class="avatar-opt" data-id="3.jpg" onclick="selectAvatar(this)" onerror="this.src='https://via.placeholder.com/80?text=P3'">
                 <img src="4.jpg" class="avatar-opt" data-id="4.jpg" onclick="selectAvatar(this)" onerror="this.src='https://via.placeholder.com/80?text=P4'">
+                <img src="5.jpg" class="avatar-opt" data-id="5.jpg" onclick="selectAvatar(this)" onerror="this.src='https://via.placeholder.com/80?text=P5'">
+                <img src="6.jpg" class="avatar-opt" data-id="6.jpg" onclick="selectAvatar(this)" onerror="this.src='https://via.placeholder.com/80?text=P6'">
+                <img src="7.jpg" class="avatar-opt" data-id="7.jpg" onclick="selectAvatar(this)" onerror="this.src='https://via.placeholder.com/80?text=P7'">
+                <img src="8.jpg" class="avatar-opt" data-id="8.jpg" onclick="selectAvatar(this)" onerror="this.src='https://via.placeholder.com/80?text=P8'">
+                <img src="9.jpg" class="avatar-opt" data-id="9.jpg" onclick="selectAvatar(this)" onerror="this.src='https://via.placeholder.com/80?text=P9'">
+                <img src="10.jpg" class="avatar-opt" data-id="10.jpg" onclick="selectAvatar(this)" onerror="this.src='https://via.placeholder.com/80?text=P10'">
             </div>
+            
             <button class="pixel-btn" style="background-color: #00b894;" onclick="startGame()">✨ 建立檔案 & 開始 ✨</button>
         </div>
 
         <div id="screen-home" class="screen-section">
-            <div style="display:flex; justify-content:space-between; width:100%; align-items:center;">
+            <div style="display:flex; justify-content:space-between; width:100%; align-items:center; margin-bottom:5px;">
                 <div style="font-size:1.2rem; font-weight:bold;">公主: <span id="display-name" style="color:var(--deep-pink);"></span></div>
                 <button style="font-size:0.9rem; background:#b2bec3; border:2px solid #000; cursor:pointer; border-radius: 5px; padding:5px 8px;" onclick="resetGame()">重置</button>
             </div>
+
+            <div class="map-container" id="level-map">
+                <div class="map-line-bg"></div>
+                <div class="map-line-fill" id="map-fill"></div>
+                </div>
+
             <div class="princess-stage">
                 <img id="l-base-img" src="" class="layer-base-img">
                 <div id="l-dress" class="layer layer-dress"></div>
@@ -222,7 +220,7 @@
                 <div id="l-pet" class="layer layer-pet"></div>
                 <div id="l-crown" class="layer layer-crown"></div>
             </div>
-            <div id="status-text" style="font-size: 1.2rem; color: #636e72; margin-top:10px; font-weight:bold;">準備參加皇家舞會...</div>
+            
             <button id="next-level-btn" class="pixel-btn" onclick="enterStoryMode()">前往下一章</button>
         </div>
 
@@ -285,7 +283,7 @@
         dress: [{ icon: "👗", name: "星空禮服", desc: "閃爍著星星光芒！" }, { icon: "👘", name: "櫻花和服", desc: "散發著淡淡花香。" }, { icon: "🧜‍♀️", name: "人魚禮服", desc: "在陽光下會變色。" }, { icon: "💃", name: "熱情舞裙", desc: "穿上就想跳舞！" }],
         shoes: [{ icon: "👠", name: "玻璃鞋", desc: "小心不要跑丟了！" }, { icon: "👡", name: "黃金涼鞋", desc: "國王送的禮物。" }, { icon: "👢", name: "冒險長靴", desc: "走再遠都不會累。" }],
         hair: [{ icon: "🎀", name: "絲綢蝴蝶結", desc: "用最柔軟的絲綢做的。" }, { icon: "🌸", name: "花朵髮圈", desc: "蜜蜂可能會飛過來！" }, { icon: "💎", name: "寶石髮夾", desc: "閃亮亮的非常耀眼。" }],
-        wand: [{ icon: "🪄", name: "星光魔杖", desc: "揮舞時會有流星。" }, { icon: "🍭", name: "甜心手杖", desc: "擁有甜蜜魔法。" }, { icon: "🌙", name: "月亮權杖", desc: "吸收了滿月能量。" }],
+        wand: [{ icon: "🪄", name: "星光魔杖", desc: "揮舞時會有流星。" }, { icon: "🍭", name: "甜心手杖", desc: "擁有甜蜜魔法。" }, { icon: "🌙", name: "月亮權杖", desc: "吸收了滿月的能量。" }],
         pet: [{ icon: "🦄", name: "彩虹獨角獸", desc: "最喜歡吃紅蘿蔔！" }, { icon: "🐉", name: "噴火小龍", desc: "冬天抱著很溫暖。" }, { icon: "🐈", name: "魔法貓咪", desc: "會說人類的語言。" }, { icon: "🕊️", name: "和平鴿", desc: "帶來好消息的鳥兒。" }],
         crown: [{ icon: "👑", name: "女王皇冠", desc: "統治王國的象徵。" }, { icon: "🧢", name: "智慧帽", desc: "算術變超快！" }, { icon: "🌻", name: "太陽花冠", desc: "充滿活力與希望。" }]
     };
@@ -301,7 +299,6 @@
         { title: "最終章：女王加冕", text: "證明你的智慧，通過綜合考驗贏得皇冠！", slot: "crown", quizType: ["add", "sub", "mul", "visual_clock"], diff: {min:10, max:99} }
     ];
 
-    // 應用題庫
     const wordProblems = [
         { text: "公主有 {n1} 顆寶石，國王又給了她 {n2} 顆，現在有幾顆？", op: "+" },
         { text: "花園裡有 {n1} 朵玫瑰，採走了 {n2} 朵，還剩幾朵？", op: "-" },
@@ -318,6 +315,10 @@
     window.onload = function() {
         const firstOpt = document.querySelector('.avatar-opt[data-id="1.jpg"]');
         if(firstOpt) selectAvatar(firstOpt);
+        
+        // --- 修正重點：確保地圖初始化被執行 ---
+        initMap();
+
         try {
             if(localStorage.getItem('princessStorySave')) {
                 const saved = JSON.parse(localStorage.getItem('princessStorySave'));
@@ -354,6 +355,57 @@
         document.getElementById(id).classList.add('active');
     }
 
+    // --- 地圖初始化函式 ---
+    function initMap() {
+        const mapContainer = document.getElementById('level-map');
+        // 先清空，再重建背景線，以防重複呼叫
+        mapContainer.innerHTML = '<div class="map-line-bg"></div><div class="map-line-fill" id="map-fill"></div>';
+        
+        stages.forEach((stage, idx) => {
+            const node = document.createElement('div');
+            node.className = 'map-node';
+            node.id = `map-node-${idx}`;
+            node.innerText = "?"; // 預設問號
+            mapContainer.appendChild(node);
+        });
+    }
+
+    function updateMapVisuals() {
+        const total = stages.length;
+        const current = player.level;
+        
+        // 更新進度條長度
+        const percent = Math.min((current / (total - 1)) * 100, 100);
+        const fillBar = document.getElementById('map-fill');
+        if(fillBar) fillBar.style.width = percent + "%";
+
+        for(let i=0; i<total; i++) {
+            const node = document.getElementById(`map-node-${i}`);
+            if(!node) continue;
+
+            // 重置 class
+            node.className = 'map-node';
+            
+            if (i < current) {
+                // 已完成：顯示獲得的物品
+                node.classList.add('completed');
+                const slot = stages[i].slot;
+                if(player.inventory[slot]) {
+                    node.innerText = player.inventory[slot].icon;
+                } else {
+                    node.innerText = "✨";
+                }
+            } else if (i === current) {
+                // 目前關卡：顯示目標物品類型 (從 LootPool 隨機取一個圖示當代表)
+                node.classList.add('current');
+                node.innerText = lootPool[stages[i].slot][0].icon; 
+            } else {
+                // 未來關卡
+                node.innerText = "?";
+            }
+        }
+    }
+
     function updateHomeVisuals() {
         document.getElementById('display-name').innerText = player.name;
         document.getElementById('l-base-img').src = player.avatarId;
@@ -374,15 +426,16 @@
         updateLayer('f-pet', 'pet');
         updateLayer('f-crown', 'crown');
 
+        // 更新地圖狀態
+        updateMapVisuals();
+
         if(player.level >= 6) {
-            document.getElementById('status-text').innerText = "收集完成！";
             const btn = document.getElementById('next-level-btn');
             btn.innerText = "參加加冕典禮";
             btn.onclick = () => showFinal();
         } else {
-            document.getElementById('status-text').innerText = `第 ${player.level + 1} 章：${stages[player.level].title}`;
             const btn = document.getElementById('next-level-btn');
-            btn.innerText = "進入故事";
+            btn.innerText = `進入第 ${player.level + 1} 章`;
             btn.onclick = () => enterStoryMode();
         }
     }
@@ -417,13 +470,11 @@
         container.innerHTML = ''; 
         currentQuestions = [];
         const stage = stages[player.level];
-        // 限制最多 5 題
         for(let i=0; i<5; i++) {
             const type = stage.quizType[Math.floor(Math.random() * stage.quizType.length)];
             createQuestion(i, type, stage.diff);
         }
         
-        // 延遲繪製時鐘，確保 DOM 已經存在
         setTimeout(() => {
             currentQuestions.forEach((q, index) => {
                 if(q.type === 'visual_clock') {
@@ -433,7 +484,6 @@
         }, 100);
     }
 
-    // --- 繪製時鐘的函式 ---
     function drawClock(canvasId, hour, minute) {
         const canvas = document.getElementById(canvasId);
         if(!canvas) return;
@@ -441,14 +491,10 @@
         const radius = canvas.height / 2;
         ctx.translate(radius, radius);
         const r = radius * 0.90;
-
-        // 畫圓盤
         ctx.beginPath();
         ctx.arc(0, 0, r, 0, 2 * Math.PI);
         ctx.fillStyle = 'white'; ctx.fill();
         ctx.lineWidth = 3; ctx.strokeStyle = '#2d3436'; ctx.stroke();
-
-        // 畫刻度
         for(let num = 1; num <= 12; num++){
             let ang = num * Math.PI / 6;
             ctx.rotate(ang); ctx.translate(0, -r * 0.85); ctx.rotate(-ang);
@@ -456,15 +502,11 @@
             ctx.fillText(num.toString(), 0, 0);
             ctx.rotate(ang); ctx.translate(0, r * 0.85); ctx.rotate(-ang);
         }
-
-        // 畫時針
         let hPos = (hour % 12) * Math.PI / 6 + (minute * Math.PI / (6 * 60));
         drawHand(ctx, hPos, r * 0.5, 4, "#2d3436");
-        // 畫分針
         let mPos = (minute * Math.PI / 30);
-        drawHand(ctx, mPos, r * 0.75, 2, "#e84393"); // 分針是粉紅色的
-        
-        ctx.translate(-radius, -radius); // 重置
+        drawHand(ctx, mPos, r * 0.75, 2, "#e84393"); 
+        ctx.translate(-radius, -radius); 
     }
 
     function drawHand(ctx, pos, length, width, color) {
@@ -480,16 +522,12 @@
         let n1, n2;
 
         if(type === 'visual_clock') {
-            // 產生時鐘題：只有整點或半點，適合二年級
             let h = getRandomInt(1, 12);
-            let m = getRandomInt(0, 1) * 30; // 0 或 30
+            let m = getRandomInt(0, 1) * 30; 
             q.h = h; q.m = m;
             q.type = 'visual_clock';
-            // 判斷題型：看時鐘寫時間，或看時鐘+1小時
             let mode = getRandomInt(0, 1);
             if(mode === 0) {
-                // 基本題：現在幾點？
-                // 答案格式為 h:mm (例如 3:30)
                 q.ans = `${h}:${m === 0 ? "00" : "30"}`;
                 html = `<div style="text-align:center; width:100%;">
                         <span>現在是幾點幾分？</span><br>
@@ -497,7 +535,6 @@
                         <br><span style="font-size:1rem; color:#666;">(格式: 3:00 或 3:30)</span>
                         </div>`;
             } else {
-                // 進階題：過一小時是幾點？
                 let nextH = h + 1;
                 if(nextH > 12) nextH = 1;
                 q.ans = `${nextH}:${m === 0 ? "00" : "30"}`;
@@ -539,14 +576,12 @@
 
         const div = document.createElement('div');
         div.className = 'question-row';
-        
         let inputField = '';
         if(type === 'visual_clock') {
              inputField = `<input type="text" id="ans-${index}" placeholder="時:分">`;
         } else {
              inputField = `<input type="number" id="ans-${index}" inputmode="numeric">`;
         }
-
         div.innerHTML = `<div class="question-content"><span style="flex:1;">${index+1}. ${html}</span></div> ${inputField}`; 
         document.getElementById('quiz-list').appendChild(div); 
         currentQuestions.push(q);
@@ -557,24 +592,18 @@
         currentQuestions.forEach((q, idx) => {
             const input = document.getElementById(`ans-${idx}`);
             let val = input.value.trim();
-            
-            // 處理時鐘題的冒號格式 (3:00, 03:00, 3:0)
             if(q.type === 'visual_clock') {
-                // 統一格式化：補0
                 let parts = val.split(/[:：]/);
                 if(parts.length === 2) {
                     let h = parseInt(parts[0]);
                     let m = parseInt(parts[1]);
-                    // 簡單比較字串
                     let standardUser = `${h}:${m === 0 ? "00" : "30"}`;
-                    // 容錯: 如果題目是 3:00，user 輸入 3 也算對
                     if(standardUser === q.ans) {
                          input.style.borderColor = "#00b894"; input.style.backgroundColor = "#d4edda";
                          correctCount++;
                          return;
                     }
                 }
-                // 錯誤處理
                 input.style.borderColor = "#d63031"; input.style.backgroundColor = "#fab1a0";
             } else {
                 if(parseInt(val) === q.ans) {
