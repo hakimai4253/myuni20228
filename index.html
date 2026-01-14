@@ -26,7 +26,6 @@
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            /* 禁止選取文字，讓APP體驗更好 */
             user-select: none; 
             -webkit-user-select: none;
         }
@@ -46,7 +45,6 @@
             box-sizing: border-box;
         }
 
-        /* --- 顯示區域 (Screen) --- */
         .screen-container {
             background-color: #ffe0e9;
             border: 4px solid var(--purple);
@@ -70,16 +68,14 @@
             animation: fadeIn 0.5s;
         }
         
-        .screen-section.active {
-            display: flex;
-        }
+        .screen-section.active { display: flex; }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* --- 角色換裝區 (Canvas) --- */
+        /* 公主顯示區 */
         .princess-stage {
             width: 250px;
             height: 300px;
@@ -92,7 +88,6 @@
             box-shadow: inset 0 0 20px rgba(0,0,0,0.1);
         }
 
-        /* 換裝圖層 */
         .layer {
             position: absolute;
             left: 50%;
@@ -108,7 +103,6 @@
             animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        /* 各部位定位 */
         .layer-base { top: 60px; font-size: 80px; z-index: 1; opacity: 1; filter: none; }
         .layer-dress { top: 130px; font-size: 120px; z-index: 2; }
         .layer-shoes { top: 230px; font-size: 40px; z-index: 3; }
@@ -117,7 +111,7 @@
         .layer-pet { top: 180px; left: 20%; font-size: 50px; z-index: 6; }
         .layer-crown { top: 10px; font-size: 60px; z-index: 7; }
 
-        /* --- 介面元件 --- */
+        /* UI 元件 */
         h1, h2 { color: var(--deep-pink); margin: 5px 0; text-shadow: 2px 2px 0 #fff; }
         
         .pixel-btn {
@@ -131,7 +125,6 @@
             box-shadow: 4px 4px 0px rgba(0,0,0,0.2);
             margin: 10px;
             border-radius: 8px;
-            /* 增加觸控區域與防誤觸 */
             touch-action: manipulation;
         }
         .pixel-btn:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px rgba(0,0,0,0.2); }
@@ -157,15 +150,14 @@
             background: #fff; 
             transition: transform 0.2s;
         }
-        /* 選中時的特效 */
         .avatar-opt.selected { 
             border-color: var(--deep-pink); 
             background: #ffeaa7; 
             transform: scale(1.1);
         }
 
-        /* 題目區 */
-        .quiz-panel { width: 100%; text-align: left; }
+        /* 題目區修正 */
+        .quiz-panel { width: 100%; text-align: left; padding-bottom: 20px; }
         .question-row { 
             background: #fff; border: 2px solid var(--purple); margin-bottom: 8px; padding: 10px; 
             border-radius: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 1.4rem;
@@ -183,13 +175,11 @@
         @keyframes float { 0%, 100% {transform: translateY(0);} 50% {transform: translateY(-10px);} }
         @keyframes bounce { 0%, 100% {transform: scale(1);} 50% {transform: scale(1.1);} }
 
-        /* 煙火特效 */
         .firework {
             position: absolute; width: 10px; height: 10px; border-radius: 50%;
             animation: explode 1s ease-out forwards; pointer-events: none;
         }
         @keyframes explode { to { transform: scale(10); opacity: 0; } }
-
     </style>
 </head>
 <body>
@@ -201,7 +191,6 @@
             <h1>👑 公主檔案建立 👑</h1>
             <p>請輸入公主的名字：</p>
             <input type="text" id="player-name" class="input-box" placeholder="例如: 艾莎" maxlength="8">
-            
             <p>選擇你的樣子：</p>
             <div class="avatar-select">
                 <div class="avatar-opt selected" onclick="selectAvatar('👧', this)">👧</div>
@@ -209,7 +198,6 @@
                 <div class="avatar-opt" onclick="selectAvatar('👱‍♀️', this)">👱‍♀️</div>
                 <div class="avatar-opt" onclick="selectAvatar('👩‍🦱', this)">👩‍🦱</div>
             </div>
-            
             <button class="pixel-btn" onclick="startGame()">建立檔案 & 開始</button>
         </div>
 
@@ -218,7 +206,6 @@
                 <div style="font-size:1.2rem;">公主: <span id="display-name" style="color:var(--deep-pink); font-weight:bold;"></span></div>
                 <button style="font-size:0.8rem; background:#b2bec3; border:1px solid #000; cursor:pointer;" onclick="resetGame()">重置</button>
             </div>
-
             <div class="princess-stage">
                 <div id="l-base" class="layer layer-base">👧</div>
                 <div id="l-dress" class="layer layer-dress">👗</div>
@@ -228,7 +215,6 @@
                 <div id="l-pet" class="layer layer-pet">🦄</div>
                 <div id="l-crown" class="layer layer-crown">👑</div>
             </div>
-
             <div id="status-text" style="font-size: 1.2rem; color: #636e72;">準備參加皇家舞會...</div>
             <button id="next-level-btn" class="pixel-btn" onclick="enterStoryMode()">前往下一章</button>
         </div>
@@ -244,8 +230,7 @@
 
         <div id="screen-quiz" class="screen-section" style="justify-content: flex-start;">
             <div style="display:flex; justify-content:space-between; width:100%; margin-bottom:10px; border-bottom:2px dashed #000; padding-bottom:5px;">
-                <span>試煉中...</span>
-                <span id="timer"></span>
+                <span>✨ 魔法試煉中 ✨</span>
             </div>
             <div id="quiz-list" class="quiz-panel"></div>
             <button class="pixel-btn" style="background:#00b894; width:100%;" onclick="submitQuiz()">施展魔法 (提交)</button>
@@ -277,78 +262,57 @@
 </div>
 
 <script>
-    // --- 遊戲資料與設定 ---
-    let player = {
-        name: "",
-        avatar: "👧",
-        level: 0, 
-        unlocked: [false, false, false, false, false, false] 
-    };
+    let player = { name: "", avatar: "👧", level: 0, unlocked: [false, false, false, false, false, false] };
 
+    // 每一關固定的題型設定 (故事模式不讓使用者選，因為要配合劇情)
     const stages = [
-        { title: "第一章：空蕩蕩的衣櫥", text: "舞會邀請函寄來了！衣櫥卻空空如也。請用「加法魔法」變出禮服！", itemIcon: "👗", itemName: "星空禮服", layerId: "l-dress", quizType: ["add"], diff: {min:10, max:50} },
-        { title: "第二章：赤腳的尷尬", text: "穿上了禮服，但還是光著腳丫？快用「減法魔法」找回玻璃鞋！", itemIcon: "👠", itemName: "玻璃鞋", layerId: "l-shoes", quizType: ["sub"], diff: {min:20, max:60} },
-        { title: "第三章：亂糟糟的頭髮", text: "頭髮睡得亂七八糟。用「乘法智慧」梳理出漂亮的髮型吧！", itemIcon: "🎀", itemName: "蝴蝶結", layerId: "l-hair", quizType: ["mul"], diff: {min:2, max:9} },
-        { title: "第四章：需要一點防護", text: "去舞會的路上有壞脾氣的巨魔？你需要一支魔法棒！(時間計算)", itemIcon: "🪄", itemName: "魔法棒", layerId: "l-wand", quizType: ["clock"], diff: {} },
-        { title: "第五章：漫長的路途", text: "皇宮太遠了，召喚神獸夥伴載我們一程吧！(綜合題)", itemIcon: "🦄", itemName: "獨角獸", layerId: "l-pet", quizType: ["add", "sub", "word"], diff: {min:20, max:80} },
-        { title: "最終章：加冕時刻", text: "國王決定為最聰明的公主戴上皇冠！這是最後的試煉！", itemIcon: "👑", itemName: "女王皇冠", layerId: "l-crown", quizType: ["add", "sub", "mul"], diff: {min:10, max:99} }
+        { title: "第一章：衣櫥魔法", text: "衣櫥空空的！請用「加法魔法」變出禮服！", itemIcon: "👗", itemName: "星空禮服", layerId: "l-dress", quizType: ["add"], diff: {min:10, max:50} },
+        { title: "第二章：尋找鞋子", text: "光著腳丫怎麼跳舞？用「減法魔法」找回玻璃鞋！", itemIcon: "👠", itemName: "玻璃鞋", layerId: "l-shoes", quizType: ["sub"], diff: {min:20, max:60} },
+        { title: "第三章：整理頭髮", text: "頭髮亂糟糟，用「乘法」變出漂亮的蝴蝶結！", itemIcon: "🎀", itemName: "蝴蝶結", layerId: "l-hair", quizType: ["mul"], diff: {min:2, max:9} },
+        { title: "第四章：時間管理", text: "舞會幾點開始？算出正確的「時間」才能出發！", itemIcon: "🪄", itemName: "魔法棒", layerId: "l-wand", quizType: ["clock"], diff: {} },
+        { title: "第五章：神獸夥伴", text: "路途太遠了，用綜合魔法召喚獨角獸吧！", itemIcon: "🦄", itemName: "獨角獸", layerId: "l-pet", quizType: ["add", "sub", "word"], diff: {min:20, max:80} },
+        { title: "最終章：女王加冕", text: "證明你的智慧，贏得女王皇冠！", itemIcon: "👑", itemName: "女王皇冠", layerId: "l-crown", quizType: ["add", "sub", "mul"], diff: {min:10, max:99} }
     ];
 
     let currentQuestions = [];
     let selectedAvatar = "👧";
 
-    // --- 初始化 ---
     window.onload = function() {
-        // 嘗試讀取進度，加上 try-catch 防止無痕模式報錯
         try {
             if(localStorage.getItem('princessStorySave')) {
                 const saved = JSON.parse(localStorage.getItem('princessStorySave'));
-                // 簡易驗證資料完整性
                 if(saved && saved.name) {
                     player = saved;
                     showScreen('screen-home');
                     updateHomeVisuals();
                 }
             }
-        } catch(e) {
-            console.log("無法讀取存檔 (可能是隱私模式)");
-        }
+        } catch(e) { console.log("隱私模式無法讀取存檔"); }
     };
 
     function saveGame() {
-        try {
-            localStorage.setItem('princessStorySave', JSON.stringify(player));
-        } catch (e) {
-            console.log("存檔失敗 (可能是隱私模式或空間不足)");
-        }
+        try { localStorage.setItem('princessStorySave', JSON.stringify(player)); } catch (e) {}
     }
 
     function resetGame() {
-        if(confirm("確定要刪除檔案並重新開始嗎？")) {
+        if(confirm("重置進度？")) {
             try { localStorage.removeItem('princessStorySave'); } catch(e){}
             location.reload();
         }
     }
 
-    // --- 修正後的頭像選擇 (支援 iPad) ---
     function selectAvatar(char, element) {
         selectedAvatar = char;
-        // 移除所有選中狀態
         document.querySelectorAll('.avatar-opt').forEach(el => el.classList.remove('selected'));
-        // 加上目前選中的狀態
         if(element) element.classList.add('selected');
     }
 
     function startGame() {
         const nameInput = document.getElementById('player-name').value.trim();
-        if(!nameInput) { alert("請輸入公主的名字！"); return; }
-        
+        if(!nameInput) { alert("請輸入名字！"); return; }
         player.name = nameInput;
         player.avatar = selectedAvatar;
-        
-        saveGame(); // 嘗試存檔
-        
-        // 無論存檔是否成功，都進入遊戲
+        saveGame();
         showScreen('screen-home');
         updateHomeVisuals();
     }
@@ -361,28 +325,24 @@
     function updateHomeVisuals() {
         document.getElementById('display-name').innerText = player.name;
         document.getElementById('l-base').innerText = player.avatar;
-        // 如果有最終畫面也要更新
         const fBase = document.getElementById('f-base');
         if(fBase) fBase.innerText = player.avatar;
 
         stages.forEach((stage, idx) => {
             const el = document.getElementById(stage.layerId);
-            if(el && player.unlocked[idx]) {
-                el.classList.add('unlocked');
-            } else if (el) {
-                el.classList.remove('unlocked');
-            }
+            if(el && player.unlocked[idx]) el.classList.add('unlocked');
+            else if (el) el.classList.remove('unlocked');
         });
 
         if(player.level >= 6) {
-            document.getElementById('status-text').innerText = "裝備收集完畢！";
+            document.getElementById('status-text').innerText = "收集完成！";
             const btn = document.getElementById('next-level-btn');
-            btn.innerText = "參加加冕典禮";
+            btn.innerText = "加冕典禮";
             btn.onclick = () => showFinal();
         } else {
-            document.getElementById('status-text').innerText = `目前進度: 第 ${player.level + 1} 章`;
+            document.getElementById('status-text').innerText = `第 ${player.level + 1} 章：${stages[player.level].title}`;
             const btn = document.getElementById('next-level-btn');
-            btn.innerText = "前往下一章";
+            btn.innerText = "進入故事";
             btn.onclick = () => enterStoryMode();
         }
     }
@@ -396,20 +356,20 @@
         showScreen('screen-story');
     }
 
-    // --- 測驗邏輯 ---
+    // --- 核心修正：題目產生器 ---
     function getRandomInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
 
     function startQuiz() {
         showScreen('screen-quiz');
-        const container = document.getElementById('quiz-list');
-        container.innerHTML = '';
+        const container = document.getElementById('quiz-list'); // 確保這裡抓到元素
+        container.innerHTML = ''; // 清空舊題目
         currentQuestions = [];
         
         const stage = stages[player.level];
         
         for(let i=0; i<5; i++) {
-            // 隨機選一個類型
             const type = stage.quizType[Math.floor(Math.random() * stage.quizType.length)];
+            // 呼叫產生題目
             createQuestion(i, type, stage.diff);
         }
     }
@@ -434,7 +394,6 @@
             q.ans = n1 * n2;
             html = `${n1} × ${n2} = ?`;
         } else if(type === 'clock') {
-            // 簡單的時間推算題
             let h = getRandomInt(1, 9);
             let addH = getRandomInt(1, 3);
             q.ans = h + addH;
@@ -447,8 +406,12 @@
 
         const div = document.createElement('div');
         div.className = 'question-row';
-        div.innerHTML = `<span>${index+1}. ${html}</span> <input type="number" id="ans-${index}" inputmode="numeric">`; // inputmode 讓手機跳出數字鍵盤
-        container.appendChild(div);
+        div.innerHTML = `<span>${index+1}. ${html}</span> <input type="number" id="ans-${index}" inputmode="numeric">`; 
+        
+        // --- 關鍵修正：這裡原本報錯，現在修好了 ---
+        document.getElementById('quiz-list').appendChild(div); 
+        // ----------------------------------------
+        
         currentQuestions.push(q);
     }
 
@@ -471,13 +434,9 @@
         });
 
         if(correctCount === 5) {
-            setTimeout(() => {
-                // alert("太棒了！全部答對！"); 
-                // 移除alert改直接跳轉，體驗更順暢
-                levelClear();
-            }, 500);
+            setTimeout(() => { levelClear(); }, 500);
         } else {
-            alert(`答對 ${correctCount} 題。請訂正紅色的題目後再按提交！`);
+            alert(`答對 ${correctCount}/5 題。請訂正紅色的題目！`);
         }
     }
 
@@ -514,7 +473,6 @@
         document.body.appendChild(fw);
         setTimeout(() => fw.remove(), 1000);
     }
-
 </script>
 </body>
 </html>
