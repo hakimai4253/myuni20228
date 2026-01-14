@@ -26,6 +26,9 @@
             justify-content: center;
             align-items: center;
             overflow: hidden;
+            /* 禁止選取文字，讓APP體驗更好 */
+            user-select: none; 
+            -webkit-user-select: none;
         }
 
         .game-boy {
@@ -52,12 +55,12 @@
             overflow-y: auto;
             position: relative;
             padding: 15px;
-            display: flex; /* 預設隱藏，由 JS 控制顯示哪個 screen */
+            display: flex;
             flex-direction: column;
         }
 
         .screen-section {
-            display: none; /* 預設所有畫面隱藏 */
+            display: none;
             width: 100%;
             height: 100%;
             flex-direction: column;
@@ -95,7 +98,7 @@
             left: 50%;
             transform: translateX(-50%);
             transition: all 0.5s;
-            opacity: 0.3; /* 未獲得時半透明 */
+            opacity: 0.3;
             filter: grayscale(100%);
         }
         
@@ -105,14 +108,14 @@
             animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        /* 各部位定位 (使用 Emoji 或簡單圖形模擬) */
-        .layer-base { top: 60px; font-size: 80px; z-index: 1; opacity: 1; filter: none; } /* 臉 */
-        .layer-dress { top: 130px; font-size: 120px; z-index: 2; } /* 衣服 */
-        .layer-shoes { top: 230px; font-size: 40px; z-index: 3; } /* 鞋子 */
-        .layer-hair { top: 40px; font-size: 90px; z-index: 4; } /* 髮飾/頭髮 */
-        .layer-wand { top: 140px; left: 75%; font-size: 60px; z-index: 5; transform: translateX(-50%) rotate(15deg); } /* 魔法棒 */
-        .layer-pet { top: 180px; left: 20%; font-size: 50px; z-index: 6; } /* 寵物 */
-        .layer-crown { top: 10px; font-size: 60px; z-index: 7; } /* 皇冠 */
+        /* 各部位定位 */
+        .layer-base { top: 60px; font-size: 80px; z-index: 1; opacity: 1; filter: none; }
+        .layer-dress { top: 130px; font-size: 120px; z-index: 2; }
+        .layer-shoes { top: 230px; font-size: 40px; z-index: 3; }
+        .layer-hair { top: 40px; font-size: 90px; z-index: 4; }
+        .layer-wand { top: 140px; left: 75%; font-size: 60px; z-index: 5; transform: translateX(-50%) rotate(15deg); }
+        .layer-pet { top: 180px; left: 20%; font-size: 50px; z-index: 6; }
+        .layer-crown { top: 10px; font-size: 60px; z-index: 7; }
 
         /* --- 介面元件 --- */
         h1, h2 { color: var(--deep-pink); margin: 5px 0; text-shadow: 2px 2px 0 #fff; }
@@ -128,6 +131,8 @@
             box-shadow: 4px 4px 0px rgba(0,0,0,0.2);
             margin: 10px;
             border-radius: 8px;
+            /* 增加觸控區域與防誤觸 */
+            touch-action: manipulation;
         }
         .pixel-btn:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px rgba(0,0,0,0.2); }
         
@@ -143,8 +148,21 @@
         }
 
         .avatar-select { display: flex; gap: 10px; justify-content: center; margin: 10px; }
-        .avatar-opt { font-size: 2.5rem; cursor: pointer; border: 3px solid transparent; border-radius: 50%; padding: 5px; background: #fff; }
-        .avatar-opt.selected { border-color: var(--deep-pink); background: #ffeaa7; animation: bounce 0.5s; }
+        .avatar-opt { 
+            font-size: 2.5rem; 
+            cursor: pointer; 
+            border: 3px solid transparent; 
+            border-radius: 50%; 
+            padding: 5px; 
+            background: #fff; 
+            transition: transform 0.2s;
+        }
+        /* 選中時的特效 */
+        .avatar-opt.selected { 
+            border-color: var(--deep-pink); 
+            background: #ffeaa7; 
+            transform: scale(1.1);
+        }
 
         /* 題目區 */
         .quiz-panel { width: 100%; text-align: left; }
@@ -155,22 +173,17 @@
         .question-row input { font-size: 1.4rem; width: 60px; text-align: center; border: 2px solid #ccc; border-radius: 4px; font-family: var(--pixel-font); }
         .correct-ans { color: green; font-size: 1rem; margin-left: 5px; }
 
-        /* 故事卡片 */
         .story-card {
-            background: #fff;
-            padding: 20px;
-            border: 4px dashed var(--purple);
-            border-radius: 15px;
-            max-width: 90%;
+            background: #fff; padding: 20px; border: 4px dashed var(--purple);
+            border-radius: 15px; max-width: 90%;
         }
         .story-text { font-size: 1.6rem; line-height: 1.4; color: #2d3436; margin-bottom: 20px; }
         .item-preview { font-size: 5rem; animation: float 2s infinite ease-in-out; margin: 10px 0; }
 
-        @keyframes bounce { 0%, 100% {transform: scale(1);} 50% {transform: scale(1.1);} }
         @keyframes float { 0%, 100% {transform: translateY(0);} 50% {transform: translateY(-10px);} }
-        @keyframes rotate { 0% {transform: rotate(0deg);} 100% {transform: rotate(360deg);} }
+        @keyframes bounce { 0%, 100% {transform: scale(1);} 50% {transform: scale(1.1);} }
 
-        /* 煙火特效 (簡單版) */
+        /* 煙火特效 */
         .firework {
             position: absolute; width: 10px; height: 10px; border-radius: 50%;
             animation: explode 1s ease-out forwards; pointer-events: none;
@@ -191,10 +204,10 @@
             
             <p>選擇你的樣子：</p>
             <div class="avatar-select">
-                <div class="avatar-opt" onclick="selectAvatar('👧')">👧</div>
-                <div class="avatar-opt" onclick="selectAvatar('👩‍🦰')">👩‍🦰</div>
-                <div class="avatar-opt" onclick="selectAvatar('👱‍♀️')">👱‍♀️</div>
-                <div class="avatar-opt" onclick="selectAvatar('👩‍🦱')">👩‍🦱</div>
+                <div class="avatar-opt selected" onclick="selectAvatar('👧', this)">👧</div>
+                <div class="avatar-opt" onclick="selectAvatar('👩‍🦰', this)">👩‍🦰</div>
+                <div class="avatar-opt" onclick="selectAvatar('👱‍♀️', this)">👱‍♀️</div>
+                <div class="avatar-opt" onclick="selectAvatar('👩‍🦱', this)">👩‍🦱</div>
             </div>
             
             <button class="pixel-btn" onclick="startGame()">建立檔案 & 開始</button>
@@ -232,10 +245,9 @@
         <div id="screen-quiz" class="screen-section" style="justify-content: flex-start;">
             <div style="display:flex; justify-content:space-between; width:100%; margin-bottom:10px; border-bottom:2px dashed #000; padding-bottom:5px;">
                 <span>試煉中...</span>
-                <span id="timer">00:00</span>
+                <span id="timer"></span>
             </div>
-            <div id="quiz-list" class="quiz-panel">
-                </div>
+            <div id="quiz-list" class="quiz-panel"></div>
             <button class="pixel-btn" style="background:#00b894; width:100%;" onclick="submitQuiz()">施展魔法 (提交)</button>
         </div>
 
@@ -243,7 +255,6 @@
             <h1 style="font-size:3rem;">✨ 試煉成功 ✨</h1>
             <p style="font-size:1.5rem;">你獲得了：<span id="reward-name" style="color:var(--deep-pink); font-weight:bold;"></span></p>
             <div id="reward-display" style="font-size:6rem; animation: bounce 1s infinite;"></div>
-            <p>經驗值 +100</p>
             <button class="pixel-btn" onclick="goHome()">穿上裝備</button>
         </div>
         
@@ -270,85 +281,62 @@
     let player = {
         name: "",
         avatar: "👧",
-        level: 0, // 當前關卡 (0-5)
+        level: 0, 
         unlocked: [false, false, false, false, false, false] 
     };
 
-    // 關卡設定：故事、獎勵、題目類型
     const stages = [
-        {
-            title: "第一章：空蕩蕩的衣櫥",
-            text: "舞會邀請函寄來了！可是公主打開衣櫥，發現裡面空空如也。讓我們運用「加法魔法」變出一件美麗的禮服吧！",
-            itemIcon: "👗", itemName: "星空禮服", layerId: "l-dress",
-            quizType: ["add"], difficulty: {min:10, max:50}
-        },
-        {
-            title: "第二章：赤腳的尷尬",
-            text: "穿上了禮服，但低頭一看...怎麼還是光著腳丫？皇宮的地板很冰的！快用「減法魔法」找回玻璃鞋！",
-            itemIcon: "👠", itemName: "玻璃鞋", layerId: "l-shoes",
-            quizType: ["sub"], difficulty: {min:20, max:60}
-        },
-        {
-            title: "第三章：亂糟糟的頭髮",
-            text: "照照鏡子，頭髮睡得亂七八糟。需要一個漂亮的蝴蝶結來整理儀容。這次要考驗你的「乘法智慧」！",
-            itemIcon: "🎀", itemName: "絲綢蝴蝶結", layerId: "l-hair",
-            quizType: ["mul"], difficulty: {min:2, max:9}
-        },
-        {
-            title: "第四章：需要一點防護",
-            text: "聽說去舞會的路上有壞脾氣的巨魔？你需要一支魔法棒來保護自己！看懂「時間」才能抓住魔法的最佳時機！",
-            itemIcon: "🪄", itemName: "星光魔法棒", layerId: "l-wand",
-            quizType: ["clock"], difficulty: {}
-        },
-        {
-            title: "第五章：漫長的路途",
-            text: "皇宮太遠了，走路會遲到的。召喚傳說中的神獸夥伴載我們一程吧！綜合運用你所有的數學能力！",
-            itemIcon: "🦄", itemName: "彩虹獨角獸", layerId: "l-pet",
-            quizType: ["add", "sub", "word"], difficulty: {min:20, max:80}
-        },
-        {
-            title: "最終章：加冕時刻",
-            text: "終於抵達舞會現場，大家都為你驚嘆。國王決定為最聰明的公主戴上皇冠！這是最後的試煉！",
-            itemIcon: "👑", itemName: "女王皇冠", layerId: "l-crown",
-            quizType: ["add", "sub", "mul", "clock", "word"], difficulty: {min:10, max:99}
-        }
+        { title: "第一章：空蕩蕩的衣櫥", text: "舞會邀請函寄來了！衣櫥卻空空如也。請用「加法魔法」變出禮服！", itemIcon: "👗", itemName: "星空禮服", layerId: "l-dress", quizType: ["add"], diff: {min:10, max:50} },
+        { title: "第二章：赤腳的尷尬", text: "穿上了禮服，但還是光著腳丫？快用「減法魔法」找回玻璃鞋！", itemIcon: "👠", itemName: "玻璃鞋", layerId: "l-shoes", quizType: ["sub"], diff: {min:20, max:60} },
+        { title: "第三章：亂糟糟的頭髮", text: "頭髮睡得亂七八糟。用「乘法智慧」梳理出漂亮的髮型吧！", itemIcon: "🎀", itemName: "蝴蝶結", layerId: "l-hair", quizType: ["mul"], diff: {min:2, max:9} },
+        { title: "第四章：需要一點防護", text: "去舞會的路上有壞脾氣的巨魔？你需要一支魔法棒！(時間計算)", itemIcon: "🪄", itemName: "魔法棒", layerId: "l-wand", quizType: ["clock"], diff: {} },
+        { title: "第五章：漫長的路途", text: "皇宮太遠了，召喚神獸夥伴載我們一程吧！(綜合題)", itemIcon: "🦄", itemName: "獨角獸", layerId: "l-pet", quizType: ["add", "sub", "word"], diff: {min:20, max:80} },
+        { title: "最終章：加冕時刻", text: "國王決定為最聰明的公主戴上皇冠！這是最後的試煉！", itemIcon: "👑", itemName: "女王皇冠", layerId: "l-crown", quizType: ["add", "sub", "mul"], diff: {min:10, max:99} }
     ];
 
     let currentQuestions = [];
     let selectedAvatar = "👧";
 
-    // --- 初始化與存檔 ---
+    // --- 初始化 ---
     window.onload = function() {
-        if(localStorage.getItem('princessStorySave')) {
-            player = JSON.parse(localStorage.getItem('princessStorySave'));
-            if(player.name) {
-                showScreen('screen-home');
-                updateHomeVisuals();
+        // 嘗試讀取進度，加上 try-catch 防止無痕模式報錯
+        try {
+            if(localStorage.getItem('princessStorySave')) {
+                const saved = JSON.parse(localStorage.getItem('princessStorySave'));
+                // 簡易驗證資料完整性
+                if(saved && saved.name) {
+                    player = saved;
+                    showScreen('screen-home');
+                    updateHomeVisuals();
+                }
             }
+        } catch(e) {
+            console.log("無法讀取存檔 (可能是隱私模式)");
         }
     };
 
     function saveGame() {
-        localStorage.setItem('princessStorySave', JSON.stringify(player));
+        try {
+            localStorage.setItem('princessStorySave', JSON.stringify(player));
+        } catch (e) {
+            console.log("存檔失敗 (可能是隱私模式或空間不足)");
+        }
     }
 
     function resetGame() {
-        if(confirm("確定要刪除公主檔案並重新開始嗎？")) {
-            localStorage.removeItem('princessStorySave');
+        if(confirm("確定要刪除檔案並重新開始嗎？")) {
+            try { localStorage.removeItem('princessStorySave'); } catch(e){}
             location.reload();
         }
     }
 
-    // --- 畫面切換與邏輯 ---
-    function showScreen(id) {
-        document.querySelectorAll('.screen-section').forEach(el => el.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-    }
-
-    function selectAvatar(char) {
+    // --- 修正後的頭像選擇 (支援 iPad) ---
+    function selectAvatar(char, element) {
         selectedAvatar = char;
+        // 移除所有選中狀態
         document.querySelectorAll('.avatar-opt').forEach(el => el.classList.remove('selected'));
-        event.target.classList.add('selected');
+        // 加上目前選中的狀態
+        if(element) element.classList.add('selected');
     }
 
     function startGame() {
@@ -357,36 +345,45 @@
         
         player.name = nameInput;
         player.avatar = selectedAvatar;
-        saveGame();
         
+        saveGame(); // 嘗試存檔
+        
+        // 無論存檔是否成功，都進入遊戲
         showScreen('screen-home');
         updateHomeVisuals();
+    }
+
+    function showScreen(id) {
+        document.querySelectorAll('.screen-section').forEach(el => el.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
     }
 
     function updateHomeVisuals() {
         document.getElementById('display-name').innerText = player.name;
         document.getElementById('l-base').innerText = player.avatar;
-        document.getElementById('f-base').innerText = player.avatar;
+        // 如果有最終畫面也要更新
+        const fBase = document.getElementById('f-base');
+        if(fBase) fBase.innerText = player.avatar;
 
-        // 更新裝備顯示狀態
         stages.forEach((stage, idx) => {
             const el = document.getElementById(stage.layerId);
-            if(player.unlocked[idx]) {
+            if(el && player.unlocked[idx]) {
                 el.classList.add('unlocked');
-            } else {
+            } else if (el) {
                 el.classList.remove('unlocked');
             }
         });
 
-        // 判斷是否全破
         if(player.level >= 6) {
-            document.getElementById('status-text').innerText = "所有裝備已收集完畢！";
-            document.getElementById('next-level-btn').innerText = "參加加冕典禮";
-            document.getElementById('next-level-btn').onclick = () => showFinal();
+            document.getElementById('status-text').innerText = "裝備收集完畢！";
+            const btn = document.getElementById('next-level-btn');
+            btn.innerText = "參加加冕典禮";
+            btn.onclick = () => showFinal();
         } else {
             document.getElementById('status-text').innerText = `目前進度: 第 ${player.level + 1} 章`;
-            document.getElementById('next-level-btn').innerText = "前往下一章";
-            document.getElementById('next-level-btn').onclick = () => enterStoryMode();
+            const btn = document.getElementById('next-level-btn');
+            btn.innerText = "前往下一章";
+            btn.onclick = () => enterStoryMode();
         }
     }
 
@@ -399,7 +396,7 @@
         showScreen('screen-story');
     }
 
-    // --- 測驗產生器 (核心邏輯) ---
+    // --- 測驗邏輯 ---
     function getRandomInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
 
     function startQuiz() {
@@ -410,9 +407,10 @@
         
         const stage = stages[player.level];
         
-        for(let i=0; i<5; i++) { // 每關 5 題
+        for(let i=0; i<5; i++) {
+            // 隨機選一個類型
             const type = stage.quizType[Math.floor(Math.random() * stage.quizType.length)];
-            createQuestion(i, type, stage.difficulty);
+            createQuestion(i, type, stage.diff);
         }
     }
 
@@ -436,8 +434,87 @@
             q.ans = n1 * n2;
             html = `${n1} × ${n2} = ?`;
         } else if(type === 'clock') {
-            let h = getRandomInt(1, 12), m = getRandomInt(0, 11) * 5;
-            q.ans = `${h}:${m.toString().padStart(2,'0')}`;
-            q.type = 'clock'; // 特殊標記
-            html = `時鐘是 ${h}點${m}分 嗎? (輸入 是/否)`;
-            // 簡化版：時鐘題我們改為直接文字問答，或者簡單的數字題，避免Canvas
+            // 簡單的時間推算題
+            let h = getRandomInt(1, 9);
+            let addH = getRandomInt(1, 3);
+            q.ans = h + addH;
+            html = `現在 ${h} 點，過了 ${addH} 小時是幾點？`;
+        } else if(type === 'word') {
+             let n1 = getRandomInt(15, 30), n2 = getRandomInt(5, 10);
+             q.ans = n1 - n2;
+             html = `公主有 ${n1} 顆糖，分給小朋友 ${n2} 顆，剩幾顆？`;
+        }
+
+        const div = document.createElement('div');
+        div.className = 'question-row';
+        div.innerHTML = `<span>${index+1}. ${html}</span> <input type="number" id="ans-${index}" inputmode="numeric">`; // inputmode 讓手機跳出數字鍵盤
+        container.appendChild(div);
+        currentQuestions.push(q);
+    }
+
+    function submitQuiz() {
+        let correctCount = 0;
+        currentQuestions.forEach((q, idx) => {
+            const input = document.getElementById(`ans-${idx}`);
+            if(parseInt(input.value) === q.ans) {
+                input.style.borderColor = "green";
+                input.style.backgroundColor = "#d4edda";
+                correctCount++;
+            } else {
+                input.style.borderColor = "red";
+                input.style.backgroundColor = "#f8d7da";
+                const span = document.createElement('span');
+                span.className = "correct-ans";
+                span.innerText = `(${q.ans})`;
+                if(!input.parentNode.querySelector('.correct-ans')) input.parentNode.appendChild(span);
+            }
+        });
+
+        if(correctCount === 5) {
+            setTimeout(() => {
+                // alert("太棒了！全部答對！"); 
+                // 移除alert改直接跳轉，體驗更順暢
+                levelClear();
+            }, 500);
+        } else {
+            alert(`答對 ${correctCount} 題。請訂正紅色的題目後再按提交！`);
+        }
+    }
+
+    function levelClear() {
+        const stage = stages[player.level];
+        document.getElementById('reward-name').innerText = stage.itemName;
+        document.getElementById('reward-display').innerText = stage.itemIcon;
+        
+        player.unlocked[player.level] = true;
+        player.level++;
+        saveGame();
+
+        showScreen('screen-success');
+        for(let i=0; i<15; i++) createFirework();
+    }
+
+    function goHome() {
+        showScreen('screen-home');
+        updateHomeVisuals();
+    }
+
+    function showFinal() {
+        showScreen('screen-final');
+        document.body.innerHTML = document.body.innerHTML.replace("[NAME]", player.name);
+        setInterval(createFirework, 800);
+    }
+
+    function createFirework() {
+        const fw = document.createElement('div');
+        fw.className = 'firework';
+        fw.style.left = Math.random() * 90 + 5 + '%';
+        fw.style.top = Math.random() * 80 + 10 + '%';
+        fw.style.backgroundColor = ['#fab1a0', '#e84393', '#6c5ce7', '#ffeaa7'][Math.floor(Math.random()*4)];
+        document.body.appendChild(fw);
+        setTimeout(() => fw.remove(), 1000);
+    }
+
+</script>
+</body>
+</html>
